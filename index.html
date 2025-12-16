@@ -627,7 +627,7 @@
       <nav class="nav" aria-label="Main navigation">
         <div class="nav-brand">
           <div class="logo-mark">
-            <img src="ns.png" alt="NovaStack - Web & Software Development Studio">
+            <img src="/Logos/ns.png" alt="NovaStack - Web & Software Development Studio">
           </div>
           <span>NovaStack</span>
         </div>
@@ -851,53 +851,60 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact">
-      <div class="container">
-        <div class="section-kicker">Contact</div>
-        <h2 class="section-title">Share Your Requirements</h2>
-        <p class="section-sub">Send a short brief and preferred timeline. Receive a structured proposal and estimate within one business day.</p>
+<section id="contact">
+  <div class="container">
+    <div class="section-kicker">Contact</div>
+    <h2 class="section-title">Share Your Requirements</h2>
+    <p class="section-sub">
+      Send a short brief and preferred timeline. Receive a structured proposal and estimate within one business day.
+    </p>
 
-        <div class="contact-container">
-          <div class="contact-form">
-            <form id="contactForm">
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="name">Full Name</label>
-                  <input id="name" name="name" type="text" placeholder="Your name" required>
-                </div>
-                <div class="form-group">
-                  <label for="email">Email Address</label>
-                  <input id="email" name="email" type="email" placeholder="your@email.com" required>
-                </div>
-              </div>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="company">Company / Project</label>
-                  <input id="company" name="company" type="text" placeholder="Business or project name">
-                </div>
-                <div class="form-group">
-                  <label for="phone">Phone</label>
-                  <input id="phone" name="phone" type="tel" placeholder="+91 **********">
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="services">Services Needed</label>
-                <input id="services" name="services" type="text" placeholder="Web design, app development, automation, etc." required>
-              </div>
-
-              <div class="form-group">
-                <label for="message">Project Details</label>
-                <textarea id="message" name="message" placeholder="Scope, timeline, budget range, links..."></textarea>
-              </div>
-
-              <button type="submit" class="primary-btn" style="width: 100%; padding: 18px;">
-                Send Requirements
-              </button>
-            </form>
+    <div class="contact-container">
+      <div class="contact-form">
+        <form id="contactForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input id="name" name="name" type="text" placeholder="Your name" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input id="email" name="email" type="email" placeholder="your@email.com" required>
+            </div>
           </div>
 
+          <div class="form-row">
+            <div class="form-group">
+              <label for="phone">Phone</label>
+              <input id="phone" name="phone" type="tel" placeholder="+91 **********">
+            </div>
+            <div class="form-group">
+              <label for="budget">Budget Range</label>
+              <input id="budget" name="budget" type="text" placeholder="₹5k – ₹2L">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="timeline">Preferred Timeline</label>
+              <input id="timeline" name="timeline" type="text" placeholder="2–4 weeks, 1–3 months…">
+            </div>
+            <div class="form-group">
+              <label for="projectType">Project Type</label>
+              <input id="projectType" name="projectType" type="text" placeholder="Website, SaaS, Mobile app, Automation…">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="message">Project Details</label>
+            <textarea id="message" name="message" placeholder="Scope, goals, links to references…"></textarea>
+          </div>
+
+          <button id="submitBtn" type="submit" class="primary-btn" style="width: 100%; padding: 18px;">
+            Send Requirements
+          </button>
+        </form>
+      </div>
           <aside class="contact-info" aria-label="Contact information">
             <div class="contact-item">
               <div class="contact-icon" aria-hidden="true">
@@ -980,38 +987,22 @@
     <button type="button" id="chatSend">Send</button>
   </div>
 </div>
-
 <script>
+  // Your deployed Apps Script Web App URL
+  const GOOGLE_SHEET_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwTmle-Q4yuQbOopvIM4WK3hZ7m0BCa8LouLRNEb4CMIcVDzRwFaolJKOABaGUAIsH60w/exec';
+
   // Dynamic year
-  document.getElementById('year').textContent = new Date().getFullYear(); // [file:1]
+  const yearEl = document.getElementById('year');
+  if (yearEl) {
+    yearEl.textContent = new Date().getFullYear();
+  }
 
   // Nav scroll effect
   window.addEventListener('scroll', () => {
     const shell = document.getElementById('navShell');
+    if (!shell) return;
     shell.classList.toggle('transparent', window.scrollY < 100);
-  }); // [file:1]
-
-  // Smooth scrolling
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', e => {
-      const target = document.querySelector(anchor.getAttribute('href'));
-      if (target) {
-        e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        closeMobileMenu();
-      }
-    });
-  }); // [file:1]
-
-  function scrollToContact() {
-    const section = document.getElementById('contact');
-    if (section) section.scrollIntoView({ behavior: 'smooth' });
-  } // [file:1]
-
-  function scrollToPortfolio() {
-    const section = document.getElementById('portfolio');
-    if (section) section.scrollIntoView({ behavior: 'smooth' });
-  } // [file:1]
+  });
 
   // Mobile menu
   const navToggle = document.getElementById('navToggle');
@@ -1022,7 +1013,7 @@
     navToggle.classList.remove('open');
     navToggle.setAttribute('aria-expanded', 'false');
     navMobile.classList.remove('open');
-  } // [file:1]
+  }
 
   if (navToggle && navMobile) {
     navToggle.addEventListener('click', () => {
@@ -1030,45 +1021,91 @@
       navToggle.classList.toggle('open', isOpen);
       navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     });
-  } // [file:1]
+  }
 
- // Contact form handler – send to WhatsApp
-const form = document.getElementById('contactForm');
-if (form) {
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-
-    const name = document.getElementById('name')?.value.trim() || '';
-    const email = document.getElementById('email')?.value.trim() || '';
-    const company = document.getElementById('company')?.value.trim() || '';
-    const phone = document.getElementById('phone')?.value.trim() || '';
-    const services = document.getElementById('services')?.value.trim() || '';
-    const message = document.getElementById('message')?.value.trim() || '';
-
-    const rawText =
-      `New project enquiry from website:\n\n` +
-      `Name: ${name}\n` +
-      `Email: ${email}\n` +
-      `Company / Project: ${company}\n` +
-      `Phone: ${phone}\n` +
-      `Services Needed: ${services}\n` +
-      `Details: ${message}`;
-
-    const encodedText = encodeURIComponent(rawText);
-
-    // Your WhatsApp number WITHOUT + or spaces
-    const phoneNumber = '917975549437';
-
-    const url = `https://wa.me/${phoneNumber}?text=${encodedText}`;
-
-    // Navigate to WhatsApp
-    window.location.href = url;
-
-    form.reset();
+  // Smooth scrolling for in-page anchors
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', e => {
+      const targetSelector = anchor.getAttribute('href');
+      if (!targetSelector || targetSelector === '#') return;
+      const target = document.querySelector(targetSelector);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        closeMobileMenu();
+      }
+    });
   });
-}
 
+  function scrollToContact() {
+    const section = document.getElementById('contact');
+    if (section) section.scrollIntoView({ behavior: 'smooth' });
+  }
 
+  function scrollToPortfolio() {
+    const section = document.getElementById('portfolio');
+    if (section) section.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // Contact form handler – send to Google Sheet
+  const form = document.getElementById('contactForm');
+  if (form) {
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+
+      const name = document.getElementById('name')?.value.trim() || '';
+      const email = document.getElementById('email')?.value.trim() || '';
+      const phone = document.getElementById('phone')?.value.trim() || '';
+      const budget = document.getElementById('budget')?.value.trim() || '';
+      const timeline = document.getElementById('timeline')?.value.trim() || '';
+      const projectType = document.getElementById('projectType')?.value.trim() || '';
+      const message = document.getElementById('message')?.value.trim() || '';
+
+      const submitBtn = document.getElementById('submitBtn');
+
+      if (!name || !email || !message) {
+        alert('Please fill in at least Name, Email, and Project Details.');
+        return;
+      }
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending...';
+      }
+
+      try {
+        const payload = {
+          name,
+          email,
+          phone,
+          budget,
+          timeline,
+          projectType,
+          message
+        };
+
+        await fetch(GOOGLE_SHEET_WEB_APP_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        alert('Thanks! Your details have been submitted.');
+        form.reset();
+      } catch (error) {
+        console.error(error);
+        alert('There was an error submitting the form. Please try again.');
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Send Message';
+        }
+      }
+    });
+  }
 
   // Reveal animation on scroll
   const observer = new IntersectionObserver(entries => {
@@ -1080,7 +1117,7 @@ if (form) {
     });
   }, { threshold: 0.15 });
 
-  document.querySelectorAll('.service-card, .case-card').forEach(el => observer.observe(el)); // [file:1]
+  document.querySelectorAll('.service-card, .case-card').forEach(el => observer.observe(el));
 
   // Chatbot logic
   const chatbotToggle = document.getElementById('chatbotToggle');
@@ -1091,19 +1128,21 @@ if (form) {
   const chatSend = document.getElementById('chatSend');
 
   function openChatbot() {
+    if (!chatbotPanel || !chatbotToggle) return;
     chatbotPanel.classList.add('open');
     chatbotToggle.setAttribute('aria-label', 'Close chat support');
     setTimeout(() => chatInput && chatInput.focus(), 50);
   }
 
   function closeChatbot() {
+    if (!chatbotPanel || !chatbotToggle) return;
     chatbotPanel.classList.remove('open');
     chatbotToggle.setAttribute('aria-label', 'Open chat support');
   }
 
   if (chatbotToggle) {
     chatbotToggle.addEventListener('click', () => {
-      if (chatbotPanel.classList.contains('open')) {
+      if (chatbotPanel && chatbotPanel.classList.contains('open')) {
         closeChatbot();
       } else {
         openChatbot();
@@ -1149,4 +1188,3 @@ if (form) {
 </script>
 </body>
 </html>
-
