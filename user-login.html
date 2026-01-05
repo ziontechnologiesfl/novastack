@@ -257,7 +257,7 @@
   </main>
 
   <script>
-    // TODO: Replace this with your own Apps Script web app URL for login
+    // IMPORTANT: replace with the Web app URL from Apps Script "Manage deployments"
     const WEB_APP_LOGIN_URL = 'https://script.google.com/macros/s/AKfycbwAU9dfv37_D7K968UGPBZW-hcNqBidb_cqWUwNRVHkMWmFQWc_TUJhXH7-ZRpR6IFjJQ/exec';
 
     const loginForm = document.getElementById('loginForm');
@@ -292,13 +292,11 @@
           body: JSON.stringify(body)
         });
 
-        const data = await res.json(); // Expect { ok: true/false, message?: string, redirectUrl?: string }
+        const data = await res.json(); // { ok, message, redirectUrl }
 
         if (data.ok) {
           statusEl.textContent = data.message || 'Login successful.';
           statusEl.className = 'login-status success';
-
-          // Optional redirect after successful login
           const redirectUrl = data.redirectUrl || '/';
           setTimeout(() => {
             window.location.href = redirectUrl;
@@ -319,10 +317,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
