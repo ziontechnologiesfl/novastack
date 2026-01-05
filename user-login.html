@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>NovaStack – User Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg-dark: #04010b;
+      --card-bg: rgba(10, 8, 24, 0.95);
+      --accent: #7f5dff;
+      --accent-soft: rgba(127, 93, 255, 0.18);
+      --text-main: #f5f5ff;
+      --text-muted: #a3a3c2;
+      --border-subtle: rgba(255,255,255,0.06);
+      --danger: #ff4b6a;
+      --success: #34d399;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, #281a60 0, transparent 55%),
+        radial-gradient(circle at bottom right, #111827 0, transparent 55%),
+        var(--bg-dark);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+
+    .login-shell {
+      width: 100%;
+      max-width: 420px;
+      background: var(--card-bg);
+      border-radius: 24px;
+      border: 1px solid var(--border-subtle);
+      box-shadow:
+        0 32px 80px rgba(0,0,0,0.75),
+        0 0 0 1px rgba(255,255,255,0.02);
+      padding: 24px 24px 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-shell::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(127,93,255,0.15), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(56,189,248,0.13), transparent 55%);
+      mix-blend-mode: screen;
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .login-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .login-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(148,163,184,0.45);
+      color: var(--text-muted);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .login-badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(127,93,255,0.45);
+    }
+
+    .login-title {
+      font-size: 24px;
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+
+    .login-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 22px;
+    }
+
+    .login-form-group {
+      margin-bottom: 16px;
+    }
+
+    .login-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .login-input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(15,23,42,0.8);
+      color: var(--text-main);
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .login-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(127,93,255,0.5);
+      background: rgba(15,23,42,0.96);
+    }
+
+    .login-actions {
+      margin-top: 10px;
+    }
+
+    .login-btn {
+      width: 100%;
+      border: none;
+      border-radius: 999px;
+      background: linear-gradient(120deg, #7f5dff, #22c1c3);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 10px 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 18px 35px rgba(15,23,42,0.9);
+      transition: transform 0.14s ease, box-shadow 0.14s ease, filter 0.14s ease;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+      box-shadow: 0 22px 48px rgba(15,23,42,1);
+    }
+
+    .login-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 12px 24px rgba(15,23,42,0.9);
+    }
+
+    .login-btn[disabled] {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .login-meta {
+      margin-top: 12px;
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .login-meta a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .login-status {
+      margin-top: 14px;
+      font-size: 13px;
+      min-height: 18px;
+    }
+
+    .login-status.success {
+      color: var(--success);
+    }
+
+    .login-status.error {
+      color: var(--danger);
+    }
+  </style>
+</head>
+<body>
+  <main class="login-shell">
+    <div class="login-inner">
+      <div class="login-badge">
+        <span class="login-badge-dot"></span>
+        <span>User Portal</span>
+      </div>
+
+      <h1 class="login-title">Sign in to NovaStack</h1>
+      <p class="login-subtitle">
+        Use your assigned username to access the internal dashboard and project tools.
+      </p>
+
+      <form id="loginForm">
+        <div class="login-form-group">
+          <label class="login-label" for="username">Username</label>
+          <input
+            id="username"
+            name="username"
+            type="text"
+            class="login-input"
+            autocomplete="username"
+            required
+          />
+        </div>
+
+        <div class="login-form-group">
+          <label class="login-label" for="password">Password</label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            class="login-input"
+            autocomplete="current-password"
+            required
+          />
+        </div>
+
+        <div class="login-actions">
+          <button type="submit" id="loginBtn" class="login-btn">
+            <span>Login</span>
+          </button>
+        </div>
+
+        <div class="login-meta">
+          <span>Protected access only.</span>
+          <a href="/">Back to site</a>
+        </div>
+
+        <div id="loginStatus" class="login-status"></div>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    // TODO: Replace this with your own Apps Script web app URL for login
+    const WEB_APP_LOGIN_URL = 'https://script.google.com/macros/s/YOUR_LOGIN_WEB_APP_ID/exec';
+
+    const loginForm = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+    const statusEl = document.getElementById('loginStatus');
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      if (!username || !password) {
+        statusEl.textContent = 'Please enter username and password.';
+        statusEl.className = 'login-status error';
+        return;
+      }
+
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Checking...';
+      statusEl.textContent = '';
+      statusEl.className = 'login-status';
+
+      try {
+        const body = { username, password };
+
+        const res = await fetch(WEB_APP_LOGIN_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        });
+
+        const data = await res.json(); // Expect { ok: true/false, message?: string, redirectUrl?: string }
+
+        if (data.ok) {
+          statusEl.textContent = data.message || 'Login successful.';
+          statusEl.className = 'login-status success';
+
+          // Optional redirect after successful login
+          const redirectUrl = data.redirectUrl || '/';
+          setTimeout(() => {
+            window.location.href = redirectUrl;
+          }, 700);
+        } else {
+          statusEl.textContent = data.message || 'Login not found.';
+          statusEl.className = 'login-status error';
+        }
+      } catch (err) {
+        console.error(err);
+        statusEl.textContent = 'Error contacting login server.';
+        statusEl.className = 'login-status error';
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Login';
+      }
+    });
+  </script>
+</body>
+</html>
