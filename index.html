@@ -1159,8 +1159,19 @@
 
   function sendChat() {
     if (!chatInput || !chatBody) return;
-    const text = chatInput.value.trim();
+    const rawText = chatInput.value;
+    const text = rawText.trim();
     if (!text) return;
+
+    // Normalize for case/spacing
+    const normalized = text.toLowerCase().replace(/\s+/g, ' ').trim();
+
+    // If the user types "user login" (any case/extra spaces), redirect
+    if (normalized === 'user login') {
+      // Change this URL later to your real login page
+      window.location.href = '/user-login'; // or 'user-login.html'
+      return;
+    }
 
     const userMsg = document.createElement('div');
     userMsg.className = 'chat-msg';
