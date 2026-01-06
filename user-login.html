@@ -256,64 +256,52 @@
     </div>
   </main>
 
-  <script>
-    // IMPORTANT: replace with the Web app URL from Apps Script "Manage deployments"
-    const WEB_APP_LOGIN_URL = 'https://script.google.com/macros/s/AKfycbwAU9dfv37_D7K968UGPBZW-hcNqBidb_cqWUwNRVHkMWmFQWc_TUJhXH7-ZRpR6IFjJQ/exec';
+<script>
+const API_URL =
+  'https://script.google.com/macros/s/AKfycbyT4vIAA8WbOQVPfA3vsuM9M9OKtGEvt2N_6-uiWE-M57-8-pJdjLHyyhcQ_shCLMZ5WQ/exec';
+  
 
-    const loginForm = document.getElementById('loginForm');
-    const loginBtn = document.getElementById('loginBtn');
-    const statusEl = document.getElementById('loginStatus');
+const form = document.getElementById('loginForm');
+const statusEl = document.getElementById('loginStatus');
+const btn = document.getElementById('loginBtn');
 
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
 
-      const username = document.getElementById('username').value.trim();
-      const password = document.getElementById('password').value.trim();
+  btn.disabled = true;
+  btn.textContent = 'Checking...';
+  statusEl.textContent = '';
 
-      if (!username || !password) {
-        statusEl.textContent = 'Please enter username and password.';
-        statusEl.className = 'login-status error';
-        return;
-      }
+  const params = new URLSearchParams();
+  params.append('username', document.getElementById('username').value.trim());
+  params.append('password', document.getElementById('password').value.trim());
 
-      loginBtn.disabled = true;
-      loginBtn.textContent = 'Checking...';
-      statusEl.textContent = '';
-      statusEl.className = 'login-status';
-
-      try {
-        const body = { username, password };
-
-        const res = await fetch(WEB_APP_LOGIN_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(body)
-        });
-
-        const data = await res.json(); // { ok, message, redirectUrl }
-
-        if (data.ok) {
-          statusEl.textContent = data.message || 'Login successful.';
-          statusEl.className = 'login-status success';
-          const redirectUrl = data.redirectUrl || '/';
-          setTimeout(() => {
-            window.location.href = redirectUrl;
-          }, 700);
-        } else {
-          statusEl.textContent = data.message || 'Login not found.';
-          statusEl.className = 'login-status error';
-        }
-      } catch (err) {
-        console.error(err);
-        statusEl.textContent = 'Error contacting login server.';
-        statusEl.className = 'login-status error';
-      } finally {
-        loginBtn.disabled = false;
-        loginBtn.textContent = 'Login';
-      }
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      body: params
     });
-  </script>
+
+    const data = await res.json();
+
+    if (data.ok) {
+      statusEl.textContent = data.message;
+      statusEl.className = 'login-status success';
+      window.location.href = data.redirectUrl;
+    } else {
+      statusEl.textContent = data.message;
+      statusEl.className = 'login-status error';
+    }
+  } catch (err) {
+    console.error(err);
+    statusEl.textContent = 'Server unreachable';
+    statusEl.className = 'login-status error';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Login';
+  }
+});
+</script>
+
 </body>
 </html>
