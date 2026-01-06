@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Call Team Dashboard – NovaStack</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      /* Tuned to match novastack.space palette */
+      --bg-dark: #020314;
+      --bg-grad-top: #060621;
+      --bg-grad-mid: #050316;
+      --bg-grad-bottom: #02010c;
+
+      --card-bg: rgba(9, 8, 30, 0.96);
+      --card-elevated: rgba(13, 10, 40, 0.98);
+
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.14);
+      --accent-glow: 0 0 26px rgba(56, 189, 248, 0.9);
+
+      --text-main: #f9fafb;
+      --text-muted: #9ca3c7;
+      --border-subtle: rgba(148, 163, 184, 0.24);
+
+      --danger: #f97373;
+      --success: #4ade80;
+
+      --shadow-soft: 0 32px 90px rgba(15, 23, 42, 0.95);
+
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-xl: 28px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Inter", sans-serif;
+      background:
+        radial-gradient(circle at top left, #0b102d 0, transparent 50%),
+        radial-gradient(circle at top right, #03172e 0, transparent 55%),
+        linear-gradient(to bottom, var(--bg-grad-top), var(--bg-grad-mid), var(--bg-grad-bottom));
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      padding: 16px 12px 72px;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 480px;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.16), transparent 50%),
+        radial-gradient(circle at 100% 0%, rgba(59, 130, 246, 0.16), transparent 55%),
+        linear-gradient(140deg, rgba(4, 6, 26, 0.98), rgba(2, 6, 23, 0.98));
+      border-radius: 24px;
+      border: 1px solid rgba(15, 23, 42, 0.7);
+      box-shadow: var(--shadow-soft);
+      padding: 16px 14px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(22px);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .app-shell::before {
+      content: "";
+      position: absolute;
+      inset: -80px;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(59, 130, 246, 0.28), transparent 55%),
+        radial-gradient(circle at 88% 0%, rgba(56, 189, 248, 0.22), transparent 55%);
+      opacity: 0.8;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* Top bar / username */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .user-block {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .user-label {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .user-name {
+      font-size: clamp(18px, 4vw, 20px);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-pill {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, 0.7);
+      background: radial-gradient(circle at top, rgba(56, 189, 248, 0.18), rgba(15, 23, 42, 0.92));
+      color: #e5f3ff;
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.9);
+      flex-shrink: 0;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: 6px;
+      flex-shrink: 0;
+    }
+
+    .icon-chip {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.98));
+      border: 1px solid rgba(30, 64, 175, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition:
+        border-color 0.18s ease,
+        background 0.18s ease,
+        transform 0.14s ease,
+        box-shadow 0.18s ease;
+    }
+
+    .icon-chip:hover {
+      border-color: rgba(56, 189, 248, 0.9);
+      background: radial-gradient(circle at top, rgba(56, 189, 248, 0.12), rgba(15, 23, 42, 0.98));
+      transform: translateY(-1px);
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.7);
+    }
+
+    /* Main content area */
+    .main {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-height: 0;
+    }
+
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      white-space: nowrap;
+    }
+
+    /* Summary cards */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 10px;
+    }
+
+    @media (max-width: 420px) {
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      position: relative;
+      border-radius: var(--radius-lg);
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.16), transparent 55%),
+        linear-gradient(145deg, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.96));
+      border: 1px solid rgba(30, 64, 175, 0.85);
+      padding: 12px 12px 10px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.9);
+      overflow: hidden;
+    }
+
+    .card--compact {
+      background: linear-gradient(145deg, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.96));
+    }
+
+    .card-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      margin-bottom: 6px;
+      white-space: nowrap;
+    }
+
+    .card-value {
+      font-size: clamp(20px, 4.4vw, 24px);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+
+    .card-subtext {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .chip-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, 0.85);
+      background: rgba(15, 23, 42, 0.95);
+      margin-top: 8px;
+    }
+
+    .chip-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--success);
+      box-shadow: 0 0 9px rgba(74, 222, 128, 0.85);
+    }
+
+    /* Secondary widget row */
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .stack-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .mini-card {
+      border-radius: 14px;
+      background: linear-gradient(145deg, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.96));
+      border: 1px solid rgba(30, 64, 175, 0.65);
+      padding: 8px;
+    }
+
+    .mini-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .mini-value {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .mini-sub {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Tabbed sections (for other pages later) */
+    .tab-view {
+      margin-top: 8px;
+    }
+
+    .tab-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .placeholder-box {
+      border-radius: 16px;
+      border: 1px dashed rgba(148, 163, 184, 0.8);
+      background: rgba(15, 23, 42, 0.9);
+      padding: 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* NEW: Modern bottom navigation – floating rail, fully responsive */
+    .bottom-nav-shell {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: env(safe-area-inset-bottom, 0);
+      display: flex;
+      justify-content: center;
+      padding: 0 10px 10px;
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    .bottom-nav {
+      pointer-events: auto;
+      width: 100%;
+      max-width: 520px;
+      border-radius: 16px;
+      background: rgba(6, 10, 28, 0.94);
+      border: 1px solid rgba(15, 23, 42, 0.9);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 6px 6px;
+      backdrop-filter: blur(16px);
+      gap: 2px;
+    }
+
+    .nav-item {
+      flex: 1;
+      min-width: 0;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 4px 0;
+      background: transparent;
+      color: #9ca3c7;
+      font-size: clamp(9px, 2.5vw, 11px);
+      text-transform: none;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      border: none;
+      outline: none;
+      position: relative;
+      transition:
+        color 0.18s ease,
+        transform 0.12s ease,
+        opacity 0.18s ease;
+    }
+
+    .nav-item span.icon {
+      font-size: clamp(18px, 4.4vw, 20px);
+      opacity: 0.85;
+      transition: transform 0.18s ease, opacity 0.18s ease;
+    }
+
+    .nav-item:hover {
+      color: #e5f3ff;
+      opacity: 1;
+      transform: translateY(-1px);
+    }
+
+    .nav-item:hover span.icon {
+      opacity: 1;
+      transform: translateY(-1px) scale(1.03);
+    }
+
+    .nav-item.active {
+      color: #f9fafb;
+      opacity: 1;
+      transform: translateY(-1px);
+    }
+
+    .nav-item.active span.icon {
+      transform: translateY(-1px) scale(1.06);
+    }
+
+    /* Underline indicator under active item */
+    .nav-item::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(
+        90deg,
+        rgba(56, 189, 248, 0.95),
+        rgba(37, 99, 235, 0.95)
+      );
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: width 0.18s ease, opacity 0.18s ease;
+    }
+
+    .nav-item.active::after {
+      width: 22px;
+      opacity: 1;
+    }
+
+    /* Hide old indicator element if still present in HTML */
+    .nav-indicator {
+      display: none;
+    }
+
+    /* Mobile-first tweaks for very small screens */
+    @media (max-width: 360px) {
+      body {
+        padding: 12px 8px 70px;
+      }
+      .app-shell {
+        padding: 12px 10px;
+        border-radius: 18px;
+      }
+      .top-actions {
+        gap: 4px;
+      }
+      .icon-chip {
+        width: 28px;
+        height: 28px;
+      }
+    }
+
+    /* Slightly larger viewports (tablets / landscape phones) */
+    @media (min-width: 600px) {
+      body {
+        padding: 24px 24px 80px;
+      }
+      .app-shell {
+        max-width: 560px;
+      }
+      .bottom-nav {
+        max-width: 560px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      body {
+        padding: 32px 32px 90px;
+      }
+      .app-shell {
+        max-width: 720px;
+      }
+      .bottom-nav {
+        max-width: 720px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Top: user name -->
+    <header class="top-bar">
+      <div class="user-block">
+        <div class="section-label user-label">Dashboard</div>
+        <div class="user-name">
+          <span id="userNameDisplay">Jefin </span>
+          
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="icon-chip" type="button" title="Notifications">
+          &#128276;
+        </button>
+        <button class="icon-chip" type="button" title="Profile">
+          &#128100;
+        </button>
+      </div>
+    </header>
+
+    <!-- Main: home tab content -->
+    <main class="main" id="homeTab">
+      <div>
+        <div class="section-label">Overview</div>
+        <div class="summary-grid">
+          <!-- Total earnings -->
+          <article class="card" id="earningsCard">
+            <div class="card-label">Total earnings</div>
+            <div class="card-value" id="totalEarnings">₹0</div>
+            <div class="card-subtext">Across all completed calls</div>
+            <div class="chip-pill">
+              <span class="chip-dot"></span>
+              <span id="earningsDelta">+0% vs yesterday</span>
+            </div>
+          </article>
+
+          <!-- Calls made till date -->
+          <article class="card card--compact">
+            <div class="card-label">Calls made</div>
+            <div class="card-value" id="totalCalls">0</div>
+            <div class="card-subtext">Till date</div>
+          </article>
+        </div>
+      </div>
+
+      <!-- Additional quick stats -->
+      <section class="stack">
+        <div class="stack-row">
+          <div class="mini-card">
+            <div class="mini-label">Today calls</div>
+            <div class="mini-value" id="todayCalls">0</div>
+            <div class="mini-sub">Planned vs done</div>
+          </div>
+          <div class="mini-card">
+            <div class="mini-label">Next call</div>
+            <div class="mini-value" id="nextCallTime">–</div>
+            <div class="mini-sub">From call sheet</div>
+          </div>
+          <div class="mini-card">
+            <div class="mini-label">Meetings</div>
+            <div class="mini-value" id="todayMeetings">0</div>
+            <div class="mini-sub">Today booked</div>
+          </div>
+        </div>
+
+
+         <div class="tab-view">
+          <div class="tab-title">Current call</div>
+          <div class="placeholder-box" id="quickNotesBox">
+            Add short notes after each call. This section can sync with your Notes tab later.
+          </div>
+        </div>
+        <div class="tab-view">
+          <div class="tab-title">Quick notes</div>
+          <div class="placeholder-box" id="quickNotesBox">
+            Add short notes after each call. This section can sync with your Notes tab later.
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Placeholder containers for other tabs -->
+    <main class="main" id="callSheetTab" style="display:none;">
+      <div class="section-label">Call sheet</div>
+      <div class="placeholder-box">
+        This will show rows from your call sheet (lead name, number, status, next action).
+      </div>
+    </main>
+
+    <main class="main" id="calendarTab" style="display:none;">
+      <div class="section-label">Calendar availability</div>
+      <div class="placeholder-box">
+        Agents can mark availability slots here and clients can book meetings from those slots.
+      </div>
+    </main>
+
+    <main class="main" id="notesTab" style="display:none;">
+      <div class="section-label">Notes</div>
+      <div class="placeholder-box">
+        Central notes area for each call, follow-ups, and meeting summaries.
+      </div>
+    </main>
+
+    <main class="main" id="settingsTab" style="display:none;">
+      <div class="section-label">Settings</div>
+      <div class="placeholder-box">
+        User profile, preferred working hours, default earnings rate per call, and notification toggles.
+      </div>
+    </main>
+  </div>
+
+  <!-- Bottom nav (modern, floating) -->
+  <div class="bottom-nav-shell">
+    <nav class="bottom-nav" aria-label="Primary">
+      <button class="nav-item active" data-tab="homeTab" type="button">
+        <span class="icon">&#8962;</span>
+        <span>Home</span>
+      </button>
+      <button class="nav-item" data-tab="callSheetTab" type="button">
+        <span class="icon">&#9743;</span>
+        <span>Call sheet</span>
+      </button>
+      <button class="nav-item" data-tab="calendarTab" type="button">
+        <span class="icon">&#128197;</span>
+        <span>Availability</span>
+      </button>
+      <button class="nav-item" data-tab="notesTab" type="button">
+        <span class="icon">&#9997;</span>
+        <span>Notes</span>
+      </button>
+      <button class="nav-item" data-tab="settingsTab" type="button">
+        <span class="icon">&#9881;</span>
+        <span>Settings</span>
+      </button>
+    </nav>
+  </div>
+
+  <script>
+    // Simple tab switching for bottom nav
+    const navItems = document.querySelectorAll('.nav-item');
+    const tabs = {
+      homeTab: document.getElementById('homeTab'),
+      callSheetTab: document.getElementById('callSheetTab'),
+      calendarTab: document.getElementById('calendarTab'),
+      notesTab: document.getElementById('notesTab'),
+      settingsTab: document.getElementById('settingsTab')
+    };
+
+    navItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const target = item.getAttribute('data-tab');
+
+        // Show selected tab
+        Object.keys(tabs).forEach(key => {
+          tabs[key].style.display = key === target ? 'flex' : 'none';
+        });
+
+        // Update active state
+        navItems.forEach(btn => btn.classList.remove('active'));
+        item.classList.add('active');
+      });
+    });
+
+    // Placeholder: initialize with demo data (later replace with sheet values)
+    const mockData = {
+      userName: 'Jefin',
+      totalEarnings: 12500,
+      totalCalls: 340,
+      todayCalls: 12,
+      todayMeetings: 3,
+      nextCallTime: '11:30 AM',
+      earningsDelta: '+12% vs yesterday'
+    };
+
+    function formatCurrency(v) {
+      return '₹' + v.toLocaleString('en-IN');
+    }
+
+    function initDashboard(data) {
+      document.getElementById('userNameDisplay').textContent =
+        data.userName + ' – Calls';
+      document.getElementById('totalEarnings').textContent =
+        formatCurrency(data.totalEarnings);
+      document.getElementById('totalCalls').textContent = data.totalCalls;
+      document.getElementById('todayCalls').textContent = data.todayCalls;
+      document.getElementById('todayMeetings').textContent =
+        data.todayMeetings;
+      document.getElementById('nextCallTime').textContent =
+        data.nextCallTime || '–';
+      document.getElementById('earningsDelta').textContent =
+        data.earningsDelta;
+    }
+
+    initDashboard(mockData);
+  </script>
+</body>
+</html>
