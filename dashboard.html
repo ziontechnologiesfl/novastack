@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
-      /* Tuned to match novastack.space palette */
       --bg-dark: #020314;
       --bg-grad-top: #060621;
       --bg-grad-mid: #050316;
@@ -85,7 +84,6 @@
       z-index: -1;
     }
 
-    /* Top bar / username */
     .top-bar {
       display: flex;
       align-items: center;
@@ -118,19 +116,6 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-    }
-
-    .user-pill {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      padding: 4px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(56, 189, 248, 0.7);
-      background: radial-gradient(circle at top, rgba(56, 189, 248, 0.18), rgba(15, 23, 42, 0.92));
-      color: #e5f3ff;
-      box-shadow: 0 0 14px rgba(56, 189, 248, 0.9);
-      flex-shrink: 0;
     }
 
     .top-actions {
@@ -166,7 +151,6 @@
       box-shadow: 0 0 16px rgba(56, 189, 248, 0.7);
     }
 
-    /* Main content area */
     .main {
       display: flex;
       flex-direction: column;
@@ -183,7 +167,6 @@
       white-space: nowrap;
     }
 
-    /* Summary cards */
     .summary-grid {
       display: grid;
       grid-template-columns: 1.4fr 1fr;
@@ -233,27 +216,6 @@
       color: var(--text-muted);
     }
 
-    .chip-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      padding: 4px 9px;
-      border-radius: 999px;
-      border: 1px solid rgba(56, 189, 248, 0.85);
-      background: rgba(15, 23, 42, 0.95);
-      margin-top: 8px;
-    }
-
-    .chip-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      background: var(--success);
-      box-shadow: 0 0 9px rgba(74, 222, 128, 0.85);
-    }
-
-    /* Secondary widget row */
     .stack {
       display: flex;
       flex-direction: column;
@@ -292,11 +254,6 @@
       margin-top: 2px;
     }
 
-    /* Tabbed sections (for other pages later) */
-    .tab-view {
-      margin-top: 8px;
-    }
-
     .tab-title {
       font-size: 12px;
       text-transform: uppercase;
@@ -314,7 +271,6 @@
       color: var(--text-muted);
     }
 
-    /* NEW: Modern bottom navigation – floating rail, fully responsive */
     .bottom-nav-shell {
       position: fixed;
       left: 0;
@@ -394,7 +350,6 @@
       transform: translateY(-1px) scale(1.06);
     }
 
-    /* Underline indicator under active item */
     .nav-item::after {
       content: "";
       position: absolute;
@@ -418,250 +373,710 @@
       opacity: 1;
     }
 
-    /* Hide old indicator element if still present in HTML */
-    .nav-indicator {
-      display: none;
+    /* ===== New call sheet cards (scroll) ===== */
+
+    #callSheetContainer {
+      margin-top: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 420px;
+      overflow-y: auto;
+      padding-right: 4px;
     }
 
-    /* Mobile-first tweaks for very small screens */
-    @media (max-width: 360px) {
-      body {
-        padding: 12px 8px 70px;
-      }
-      .app-shell {
-        padding: 12px 10px;
-        border-radius: 18px;
-      }
-      .top-actions {
-        gap: 4px;
-      }
-      .icon-chip {
-        width: 28px;
-        height: 28px;
-      }
+    .lead-card {
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.16), transparent 55%),
+        linear-gradient(145deg, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.96));
+      border: 1px solid rgba(30, 64, 175, 0.8);
+      padding: 12px 12px 10px;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.9);
     }
 
-    /* Slightly larger viewports (tablets / landscape phones) */
-    @media (min-width: 600px) {
-      body {
-        padding: 24px 24px 80px;
-      }
-      .app-shell {
-        max-width: 560px;
-      }
-      .bottom-nav {
-        max-width: 560px;
-      }
+    .lead-header {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 8px;
     }
 
-    @media (min-width: 1024px) {
-      body {
-        padding: 32px 32px 90px;
-      }
-      .app-shell {
-        max-width: 720px;
-      }
-      .bottom-nav {
-        max-width: 720px;
-      }
+    .lead-business {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+
+    .lead-phone {
+      font-size: 13px;
+      color: #4ade80;
+      text-decoration: none;
+    }
+
+    .lead-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin: 4px 0 6px;
+      font-size: 11px;
+    }
+
+    .lead-meta-label {
+      color: var(--text-muted);
+    }
+
+    .lead-link {
+      font-size: 12px;
+      color: #60a5fa;
+      text-decoration: underline;
+      max-width: 60%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .lead-field-block {
+      margin: 6px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .lead-field-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .lead-field-input {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.9);
+      color: #e5e7eb;
+      padding: 6px 8px;
+      font-size: 12px;
+    }
+
+    .lead-toggle-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+      align-items: center;
+    }
+
+    .lead-toggle-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    /* Bigger, more touch-friendly toggle buttons */
+    .toggle-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.28);
+      padding: 8px 16px;
+      font-size: 13px;
+      background: rgba(15,23,42,0.92);
+      color: #e5e7eb;
+      cursor: pointer;
+      min-width: 72px;
+    }
+
+    .toggle-btn.active[data-value="yes"] {
+      background: #22c55e;
+      border-color: #4ade80;
+      color: #02120a;
+    }
+
+    .toggle-btn.active[data-value="no"] {
+      background: #ef4444;
+      border-color: #f97373;
+      color: #130202;
+    }
+
+    /* Per-lead submit button */
+    .lead-submit-btn {
+      margin-top: 8px;
+      width: 100%;
+      border-radius: 999px;
+      border: none;
+      padding: 10px 0;
+      font-size: 14px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #38bdf8, #2563eb);
+      color: #020617;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.9);
+    }
+
+    .lead-submit-btn:disabled {
+      opacity: 0.5;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    /* ===== Availability tab ===== */
+
+    .availability-box {
+      border-radius: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      background: rgba(15, 23, 42, 0.92);
+      padding: 10px;
+      max-height: 320px;
+      overflow-y: auto;
+      font-size: 12px;
+    }
+
+    .availability-slot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 8px;
+      border-radius: 10px;
+      margin-bottom: 6px;
+      background: rgba(15, 23, 42, 0.98);
+      border: 1px solid rgba(30, 64, 175, 0.5);
+      transition: opacity 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+    }
+
+    .availability-slot.unavailable {
+      opacity: 0.28;
+    }
+
+    .availability-slot-label {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .availability-slot-time {
+      font-size: 12px;
+    }
+
+    .availability-slot-meta {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .availability-slot-toggle {
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      background: transparent;
+      color: #e5e7eb;
+      cursor: pointer;
+    }
+
+    .availability-slot-toggle.active {
+      background: #22c55e;
+      border-color: #4ade80;
+      color: #02120a;
+    }
+
+    .availability-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 5px 12px;
+      font-size: 0.85rem;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <div class="app-shell">
-    <!-- Top: user name -->
     <header class="top-bar">
       <div class="user-block">
-        <div class="section-label user-label">Dashboard</div>
+        <div class="section-label user-label">Welcome</div>
         <div class="user-name">
-          <span id="userNameDisplay">Jefin </span>
-          
+          <span id="userNameDisplay"></span>
         </div>
       </div>
       <div class="top-actions">
-        <button class="icon-chip" type="button" title="Notifications">
-          &#128276;
-        </button>
-        <button class="icon-chip" type="button" title="Profile">
-          &#128100;
+        <button
+          class="icon-chip"
+          type="button"
+          title="Logout"
+          onclick="window.location.href='logout.html';"
+          style="width:auto;padding:6px 14px;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;"
+        >
+          Logout
         </button>
       </div>
     </header>
 
-    <!-- Main: home tab content -->
+    <!-- HOME TAB -->
     <main class="main" id="homeTab">
       <div>
         <div class="section-label">Overview</div>
-        <div class="summary-grid">
-          <!-- Total earnings -->
-          <article class="card" id="earningsCard">
-            <div class="card-label">Total earnings</div>
-            <div class="card-value" id="totalEarnings">₹0</div>
-            <div class="card-subtext">Across all completed calls</div>
-            <div class="chip-pill">
-              <span class="chip-dot"></span>
-              <span id="earningsDelta">+0% vs yesterday</span>
-            </div>
-          </article>
 
-          <!-- Calls made till date -->
+        <article class="card" style="margin-bottom:10px;">
+          <div class="card-label">Total earnings</div>
+          <div class="card-value" id="totalEarnings">₹0</div>
+          <div class="card-subtext">Paid commission total</div>
+        </article>
+
+        <article class="card card--compact" style="margin-bottom:12px;">
+          <div class="card-label">Pending payments</div>
+          <div class="card-value" id="pendingEarnings">₹0</div>
+          <div class="card-subtext">Awaiting payout</div>
+        </article>
+
+        <div class="summary-grid">
           <article class="card card--compact">
             <div class="card-label">Calls made</div>
             <div class="card-value" id="totalCalls">0</div>
             <div class="card-subtext">Till date</div>
           </article>
+          <article class="card card--compact">
+            <div class="card-label">Meetings booked</div>
+            <div class="card-value" id="todayMeetings">0</div>
+            <div class="card-subtext">Total meetings</div>
+          </article>
         </div>
       </div>
 
-      <!-- Additional quick stats -->
       <section class="stack">
         <div class="stack-row">
           <div class="mini-card">
             <div class="mini-label">Today calls</div>
             <div class="mini-value" id="todayCalls">0</div>
-            <div class="mini-sub">Planned vs done</div>
+            <div class="mini-sub">Done</div>
           </div>
           <div class="mini-card">
-            <div class="mini-label">Next call</div>
-            <div class="mini-value" id="nextCallTime">–</div>
-            <div class="mini-sub">From call sheet</div>
+            <div class="mini-label">Confirmed Project</div>
+            <div class="mini-value" id="confirmedProjects">0</div>
+            <div class="mini-sub">Paid customers</div>
           </div>
           <div class="mini-card">
             <div class="mini-label">Meetings</div>
-            <div class="mini-value" id="todayMeetings">0</div>
-            <div class="mini-sub">Today booked</div>
+            <div class="mini-value" id="todayMeetingsMini">0</div>
+            <div class="mini-sub">Booked today</div>
           </div>
         </div>
 
-
-         <div class="tab-view">
-          <div class="tab-title">Current call</div>
-          <div class="placeholder-box" id="quickNotesBox">
-            Add short notes after each call. This section can sync with your Notes tab later.
-          </div>
-        </div>
-        <div class="tab-view">
-          <div class="tab-title">Quick notes</div>
-          <div class="placeholder-box" id="quickNotesBox">
-            Add short notes after each call. This section can sync with your Notes tab later.
-          </div>
+        <div class="tab-title">Team Updates</div>
+        <div>
+          Guys try to get at least 5 calls done today. Keep the energy high!
         </div>
       </section>
     </main>
 
-    <!-- Placeholder containers for other tabs -->
+    <!-- CALL SHEET TAB -->
     <main class="main" id="callSheetTab" style="display:none;">
       <div class="section-label">Call sheet</div>
-      <div class="placeholder-box">
-        This will show rows from your call sheet (lead name, number, status, next action).
+      <div id="callSheetContainer">
+        <div class="placeholder-box">Loading call sheet...</div>
       </div>
     </main>
 
+    <!-- CALENDAR TAB -->
     <main class="main" id="calendarTab" style="display:none;">
       <div class="section-label">Calendar availability</div>
-      <div class="placeholder-box">
-        Agents can mark availability slots here and clients can book meetings from those slots.
+      <div id="availabilityContainer" class="availability-box">
+        Loading slots...
+      </div>
+      <div class="availability-actions">
+        <button id="editAvailabilityBtn" class="nav-btn">Edit</button>
+        <button id="saveAvailabilityBtn" class="nav-btn" disabled>Submit</button>
       </div>
     </main>
 
+    <!-- NOTES TAB -->
     <main class="main" id="notesTab" style="display:none;">
-      <div class="section-label">Notes</div>
+      <div class="section-label">My Clients</div>
       <div class="placeholder-box">
         Central notes area for each call, follow-ups, and meeting summaries.
       </div>
     </main>
-
-    <main class="main" id="settingsTab" style="display:none;">
-      <div class="section-label">Settings</div>
-      <div class="placeholder-box">
-        User profile, preferred working hours, default earnings rate per call, and notification toggles.
-      </div>
-    </main>
   </div>
 
-  <!-- Bottom nav (modern, floating) -->
+  <!-- BOTTOM NAV -->
   <div class="bottom-nav-shell">
     <nav class="bottom-nav" aria-label="Primary">
       <button class="nav-item active" data-tab="homeTab" type="button">
-        <span class="icon">&#8962;</span>
+        <span class="icon">📄</span>
         <span>Home</span>
       </button>
       <button class="nav-item" data-tab="callSheetTab" type="button">
-        <span class="icon">&#9743;</span>
+        <span class="icon">📁</span>
         <span>Call sheet</span>
       </button>
       <button class="nav-item" data-tab="calendarTab" type="button">
-        <span class="icon">&#128197;</span>
+        <span class="icon">📆</span>
         <span>Availability</span>
       </button>
       <button class="nav-item" data-tab="notesTab" type="button">
-        <span class="icon">&#9997;</span>
-        <span>Notes</span>
-      </button>
-      <button class="nav-item" data-tab="settingsTab" type="button">
-        <span class="icon">&#9881;</span>
-        <span>Settings</span>
+        <span class="icon">🛍️</span>
+        <span>My Clients</span>
       </button>
     </nav>
   </div>
 
   <script>
-    // Simple tab switching for bottom nav
-    const navItems = document.querySelectorAll('.nav-item');
-    const tabs = {
-      homeTab: document.getElementById('homeTab'),
-      callSheetTab: document.getElementById('callSheetTab'),
-      calendarTab: document.getElementById('calendarTab'),
-      notesTab: document.getElementById('notesTab'),
-      settingsTab: document.getElementById('settingsTab')
+    // ===== CONFIG: YOUR WEB APP URL =====
+    const WEB_APP_BASE = 'https://script.google.com/macros/s/AKfycbx_lKpELjqhIR9LeeQJDNtg4YzFEf2KW5JP6vTpvv0_ruo2yWJPUQ968iLNVdbJfn3Xhw/exec';
+
+    // ===== URL PARAMS: SHEET NAME FROM LOGIN REDIRECT =====
+    const urlParams = new URLSearchParams(window.location.search);
+    const SHEET_NAME = urlParams.get('sheet') || '';
+    document.getElementById('userNameDisplay').textContent = SHEET_NAME || 'Agent';
+
+    // ===== DASHBOARD LOAD =====
+    async function loadDashboard() {
+      if (!SHEET_NAME) return;
+      const url = `${WEB_APP_BASE}?action=dashboard&sheet=${encodeURIComponent(SHEET_NAME)}`;
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        if (!data.ok) return;
+
+        const d = data.dashboard || {};
+        document.getElementById('totalEarnings').textContent = '₹' + (d.totalEarnings || 0);
+        document.getElementById('pendingEarnings').textContent = '₹' + (d.pendingEarnings || 0);
+        document.getElementById('totalCalls').textContent = d.totalCalls || 0;
+        document.getElementById('todayMeetings').textContent = d.todayMeetings || 0;
+        document.getElementById('todayCalls').textContent = d.todayCalls || 0;
+        document.getElementById('confirmedProjects').textContent = d.confirmedProjects || 0;
+        document.getElementById('todayMeetingsMini').textContent = d.todayMeetings || 0;
+      } catch (err) {
+        console.error('Error loading dashboard', err);
+      }
+    }
+
+    // ===== CALL SHEET LOGIC =====
+    let callRows = [];
+
+    async function loadCallSheet() {
+      const container = document.getElementById('callSheetContainer');
+      container.innerHTML = '<div class="placeholder-box">Loading call sheet...</div>';
+
+      if (!SHEET_NAME) {
+        container.innerHTML = '<div class="placeholder-box">No sheet selected.</div>';
+        return;
+      }
+
+      const url = `${WEB_APP_BASE}?action=getCallSheet&sheet=${encodeURIComponent(SHEET_NAME)}`;
+
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+
+        callRows = (data.rows || []).filter(r => r.businessName || r.bNumber || r.link);
+
+        if (!callRows.length) {
+          container.innerHTML = '<div class="placeholder-box">No leads in call sheet.</div>';
+          return;
+        }
+
+        container.innerHTML = '';
+        callRows.forEach((lead, index) => {
+          const card = createLeadCard(lead, index);
+          container.appendChild(card);
+        });
+      } catch (err) {
+        console.error(err);
+        container.innerHTML = '<div class="placeholder-box">Error loading call sheet.</div>';
+      }
+    }
+
+    function createLeadCard(lead, index) {
+      const card = document.createElement('div');
+      card.className = 'lead-card';
+      card.dataset.index = index;
+      card.dataset.dirty = 'false';
+
+      const businessName = lead.businessName || 'No name';
+      const phoneText = lead.bNumber ? `📞 ${lead.bNumber}` : 'No number';
+      const phoneHref = lead.bNumber ? `tel:${lead.bNumber}` : '#';
+      const linkHref = lead.link || '#';
+
+      card.innerHTML = `
+        <div class="lead-header">
+          <div class="lead-business">${businessName}</div>
+          <a href="${phoneHref}" class="lead-phone">${phoneText}</a>
+        </div>
+
+        <div class="lead-meta-row">
+          <span class="lead-meta-label">Location link</span>
+          <a href="${linkHref}" target="_blank" class="lead-link">${lead.link ? 'Open link' : 'No link'}</a>
+        </div>
+
+        <div class="lead-field-block">
+          <div class="lead-field-label">Meeting slot</div>
+          <input type="datetime-local" class="lead-field-input" data-field="Time Slot" value="${lead.timeSlot || ''}">
+        </div>
+
+        <div class="lead-toggle-row">
+          <span class="lead-toggle-label">Call status</span>
+          <button class="toggle-btn" data-field="Calls Status" data-value="yes">Yes</button>
+          <button class="toggle-btn" data-field="Calls Status" data-value="no">No</button>
+        </div>
+
+        <div class="lead-toggle-row">
+          <span class="lead-toggle-label">Call again</span>
+          <button class="toggle-btn" data-field="Call Again" data-value="yes">Yes</button>
+          <button class="toggle-btn" data-field="Call Again" data-value="no">No</button>
+        </div>
+
+        <div class="lead-toggle-row">
+          <span class="lead-toggle-label">Booked</span>
+          <button class="toggle-btn" data-field="Booked" data-value="yes">Yes</button>
+          <button class="toggle-btn" data-field="Booked" data-value="no">No</button>
+        </div>
+
+        <button class="lead-submit-btn" type="button" disabled>Submit changes</button>
+      `;
+
+      // Apply initial toggle state
+      applyToggleStateInCard(card, 'Calls Status', lead.callsStatus);
+      applyToggleStateInCard(card, 'Call Again', lead.callAgain);
+      applyToggleStateInCard(card, 'Booked', lead.booked);
+
+      const submitBtn = card.querySelector('.lead-submit-btn');
+
+      function markDirty() {
+        card.dataset.dirty = 'true';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit changes';
+      }
+
+      // Meeting slot change
+      const slotInput = card.querySelector('input[data-field="Time Slot"]');
+      slotInput.addEventListener('change', (e) => {
+        const value = e.target.value;
+        lead.timeSlot = value;
+        markDirty();
+      });
+
+      // Toggle buttons
+      card.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('toggle-btn')) return;
+
+        const btn = e.target;
+        const field = btn.dataset.field;
+        const value = btn.dataset.value;
+
+        card
+          .querySelectorAll(`.toggle-btn[data-field="${field}"]`)
+          .forEach(b => b.classList.remove('active'));
+
+        btn.classList.add('active');
+
+        if (field === 'Calls Status') lead.callsStatus = value;
+        if (field === 'Call Again') lead.callAgain = value;
+        if (field === 'Booked') lead.booked = value;
+
+        markDirty();
+      });
+
+      // Submit button click → send all changed fields for that lead
+      submitBtn.addEventListener('click', async () => {
+        if (card.dataset.dirty !== 'true') return;
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Saving...';
+
+        try {
+          await submitLeadChanges(lead);
+          card.dataset.dirty = 'false';
+          submitBtn.textContent = 'Saved';
+        } catch (err) {
+          console.error('Error saving lead', err);
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Retry save';
+          alert('Error saving lead. Please try again.');
+        }
+      });
+
+      return card;
+    }
+
+    function applyToggleStateInCard(card, fieldName, value) {
+      if (!value) return;
+      const selector = `.toggle-btn[data-field="${fieldName}"][data-value="${String(value).toLowerCase()}"]`;
+      const btn = card.querySelector(selector);
+      if (btn) btn.classList.add('active');
+    }
+
+    async function submitLeadChanges(lead) {
+  if (!SHEET_NAME) return;
+
+  const updates = [
+    { field: 'Time Slot', value: lead.timeSlot || '' },
+    { field: 'Calls Status', value: lead.callsStatus || '' },
+    { field: 'Call Again', value: lead.callAgain || '' },
+    { field: 'Booked', value: lead.booked || '' },
+  ];
+
+  const validUpdates = updates.filter(u => u.field && (u.value !== undefined));
+
+  for (const upd of validUpdates) {
+    const payload = {
+      rowNumber: lead.rowNumber,
+      field: upd.field,
+      value: upd.value,
+      sheet: SHEET_NAME
     };
 
-    navItems.forEach(item => {
-      item.addEventListener('click', () => {
-        const target = item.getAttribute('data-tab');
+    console.log('Submitting updateCallField payload:', payload);
 
-        // Show selected tab
-        Object.keys(tabs).forEach(key => {
-          tabs[key].style.display = key === target ? 'flex' : 'none';
-        });
-
-        // Update active state
-        navItems.forEach(btn => btn.classList.remove('active'));
-        item.classList.add('active');
-      });
+    const res = await fetch(`${WEB_APP_BASE}?action=updateCallField`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
     });
 
-    // Placeholder: initialize with demo data (later replace with sheet values)
-    const mockData = {
-      userName: 'Jefin',
-      totalEarnings: 12500,
-      totalCalls: 340,
-      todayCalls: 12,
-      todayMeetings: 3,
-      nextCallTime: '11:30 AM',
-      earningsDelta: '+12% vs yesterday'
-    };
+    const data = await res.json();
+    console.log('updateCallField response:', data);
 
-    function formatCurrency(v) {
-      return '₹' + v.toLocaleString('en-IN');
+    if (!data.ok) {
+      throw new Error(data.message || 'updateCallField failed');
+    }
+  }
+}
+    // ===== AVAILABILITY LOGIC =====
+    let availabilitySlots = [];
+    let availabilityEditMode = false;
+
+    async function loadAvailability() {
+      const container = document.getElementById('availabilityContainer');
+      container.textContent = 'Loading slots...';
+
+      try {
+        const res = await fetch(`${WEB_APP_BASE}?action=getAvailability`);
+        const data = await res.json();
+
+        if (!data.ok) {
+          container.textContent = data.message || 'Error loading slots.';
+          return;
+        }
+
+        availabilitySlots = data.slots || [];
+
+        if (!availabilitySlots.length) {
+          container.textContent = 'No slots configured.';
+          return;
+        }
+
+        renderAvailabilitySlots();
+      } catch (err) {
+        console.error(err);
+        container.textContent = 'Error loading slots.';
+      }
     }
 
-    function initDashboard(data) {
-      document.getElementById('userNameDisplay').textContent =
-        data.userName + ' – Calls';
-      document.getElementById('totalEarnings').textContent =
-        formatCurrency(data.totalEarnings);
-      document.getElementById('totalCalls').textContent = data.totalCalls;
-      document.getElementById('todayCalls').textContent = data.todayCalls;
-      document.getElementById('todayMeetings').textContent =
-        data.todayMeetings;
-      document.getElementById('nextCallTime').textContent =
-        data.nextCallTime || '–';
-      document.getElementById('earningsDelta').textContent =
-        data.earningsDelta;
+    function renderAvailabilitySlots() {
+      const container = document.getElementById('availabilityContainer');
+      container.innerHTML = '';
+
+      availabilitySlots.forEach((slot, idx) => {
+        const div = document.createElement('div');
+        div.className = 'availability-slot';
+        if (!slot.available) div.classList.add('unavailable');
+        div.dataset.index = idx;
+
+        const label = slot.label || slot.time || 'Slot';
+
+        div.innerHTML = `
+          <div class="availability-slot-label">
+            <span class="availability-slot-time">${label}</span>
+            <span class="availability-slot-meta">${slot.available ? 'Available' : 'Not available'}</span>
+          </div>
+          <button class="availability-slot-toggle ${slot.available ? 'active' : ''}">
+            ${slot.available ? 'Available' : 'Off'}
+          </button>
+        `;
+
+        const btn = div.querySelector('.availability-slot-toggle');
+        btn.addEventListener('click', () => {
+          if (!availabilityEditMode) return;
+          slot.available = !slot.available;
+          renderAvailabilitySlots();
+          document.getElementById('saveAvailabilityBtn').disabled = false;
+        });
+
+        container.appendChild(div);
+      });
     }
 
-    initDashboard(mockData);
+    async function saveAvailabilityChanges() {
+      const updates = availabilitySlots.map(s => ({
+        rowNumber: s.rowNumber,
+        available: !!s.available
+      }));
+
+      try {
+        const res = await fetch(`${WEB_APP_BASE}?action=updateAvailability`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ slots: updates })
+        });
+        const data = await res.json();
+        if (!data.ok) {
+          alert(data.message || 'Failed to save slots');
+          return;
+        }
+        availabilityEditMode = false;
+        document.getElementById('saveAvailabilityBtn').disabled = true;
+        renderAvailabilitySlots();
+      } catch (err) {
+        console.error(err);
+        alert('Error saving availability');
+      }
+    }
+
+    // ===== TAB NAVIGATION =====
+    function initTabs() {
+      const tabs = ['homeTab', 'callSheetTab', 'calendarTab', 'notesTab'];
+      const navButtons = document.querySelectorAll('.nav-item');
+
+      navButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.getAttribute('data-tab');
+          tabs.forEach(id => {
+            document.getElementById(id).style.display = (id === target) ? 'flex' : 'none';
+          });
+          navButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          if (target === 'callSheetTab') {
+            loadCallSheet();
+          }
+          if (target === 'calendarTab') {
+            loadAvailability();
+          }
+        });
+      });
+    }
+
+    // ===== EVENT BINDINGS =====
+    document.addEventListener('DOMContentLoaded', () => {
+      loadDashboard();
+      initTabs();
+
+      document.getElementById('editAvailabilityBtn').addEventListener('click', () => {
+        availabilityEditMode = !availabilityEditMode;
+        document.getElementById('saveAvailabilityBtn').disabled = !availabilityEditMode;
+      });
+
+      document.getElementById('saveAvailabilityBtn').addEventListener('click', () => {
+        saveAvailabilityChanges();
+      });
+    });
   </script>
 </body>
 </html>
