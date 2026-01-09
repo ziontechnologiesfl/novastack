@@ -17,6 +17,39 @@
       --success: #34d399;
     }
 
+    /* Bigger, more prominent toggle buttons */
+.toggle-btn {
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.28);
+  padding: 8px 16px;          /* bigger tap area */
+  font-size: 13px;
+  background: rgba(15,23,42,0.92);
+  color: #e5e7eb;
+  cursor: pointer;
+  min-width: 72px;
+}
+
+/* Submit button inside each lead card */
+.lead-submit-btn {
+  margin-top: 8px;
+  width: 100%;
+  border-radius: 999px;
+  border: none;
+  padding: 10px 0;
+  font-size: 14px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #38bdf8, #2563eb);
+  color: #020617;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.9);
+}
+
+.lead-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+  box-shadow: none;
+}
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -258,8 +291,8 @@
 
 <script>
 const API_URL =
-  'https://script.google.com/macros/s/AKfycbyT4vIAA8WbOQVPfA3vsuM9M9OKtGEvt2N_6-uiWE-M57-8-pJdjLHyyhcQ_shCLMZ5WQ/exec';
-  
+  'https://script.google.com/macros/s/AKfycbx_lKpELjqhIR9LeeQJDNtg4YzFEf2KW5JP6vTpvv0_ruo2yWJPUQ968iLNVdbJfn3Xhw/exec';
+
 
 const form = document.getElementById('loginForm');
 const statusEl = document.getElementById('loginStatus');
@@ -284,14 +317,22 @@ form.addEventListener('submit', async (e) => {
 
     const data = await res.json();
 
-    if (data.ok) {
-      statusEl.textContent = data.message;
-      statusEl.className = 'login-status success';
-      window.location.href = data.redirectUrl;
-    } else {
-      statusEl.textContent = data.message;
-      statusEl.className = 'login-status error';
-    }
+if (data.ok) {
+  statusEl.textContent = data.message;
+  statusEl.className = 'login-status success';
+
+  // Store who logged in
+  if (data.username) {
+    sessionStorage.setItem('username', data.username);
+  }
+
+  window.location.href = data.redirectUrl;
+} else {
+  statusEl.textContent = data.message;
+  statusEl.className = 'login-status error';
+}
+
+
   } catch (err) {
     console.error(err);
     statusEl.textContent = 'Server unreachable';
