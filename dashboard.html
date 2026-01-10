@@ -311,8 +311,6 @@
       background: transparent;
       color: #9ca3c7;
       font-size: clamp(9px, 2.5vw, 11px);
-      text-transform: none;
-      letter-spacing: 0.03em;
       cursor: pointer;
       border: none;
       outline: none;
@@ -373,16 +371,82 @@
       opacity: 1;
     }
 
-    /* ===== New call sheet cards (scroll) ===== */
+    /* ===== Call sheet ===== */
 
-    #callSheetContainer {
-      margin-top: 4px;
+    .call-sheet-header {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .call-sheet-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+      align-items: center;
+    }
+
+    .filter-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .filter-chip {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      padding: 5px 10px;
+      font-size: 11px;
+      background: rgba(15, 23, 42, 0.9);
+      color: #e5e7eb;
+      cursor: pointer;
+    }
+
+    .filter-chip.active {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: #38bdf8;
+      color: #e0f2fe;
+    }
+
+    .call-search-input {
+      width: 100%;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      background: rgba(15, 23, 42, 0.92);
+      color: #e5e7eb;
+      padding: 8px 12px;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .call-search-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .call-search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.5);
+    }
+
+    .call-sheet-strip {
+      margin-top: 10px;
       display: flex;
       flex-direction: column;
       gap: 12px;
-      max-height: 420px;
       overflow-y: auto;
+      max-height: 420px;
       padding-right: 4px;
+    }
+
+    .call-sheet-strip::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .call-sheet-strip::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.5);
+      border-radius: 999px;
     }
 
     .lead-card {
@@ -393,55 +457,85 @@
       border: 1px solid rgba(30, 64, 175, 0.8);
       padding: 12px 12px 10px;
       box-shadow: 0 16px 40px rgba(15, 23, 42, 0.9);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
     .lead-header {
       display: flex;
       flex-direction: column;
       gap: 4px;
-      margin-bottom: 8px;
+    }
+
+    .lead-business-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
     }
 
     .lead-business {
       font-size: 15px;
       font-weight: 600;
       letter-spacing: 0.03em;
-    }
-
-    .lead-phone {
-      font-size: 13px;
-      color: #4ade80;
-      text-decoration: none;
-    }
-
-    .lead-meta-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      margin: 4px 0 6px;
-      font-size: 11px;
-    }
-
-    .lead-meta-label {
-      color: var(--text-muted);
-    }
-
-    .lead-link {
-      font-size: 12px;
-      color: #60a5fa;
-      text-decoration: underline;
-      max-width: 60%;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
+    .lead-link {
+      font-size: 11px;
+      color: #60a5fa;
+      text-decoration: underline;
+      max-width: 45%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: right;
+    }
+
+    .lead-phone-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .lead-phone-text {
+      font-size: 13px;
+      color: #bbf7d0;
+      word-break: break-all;
+    }
+
+    .lead-call-btn {
+      flex-shrink: 0;
+      border-radius: 999px;
+      border: none;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #22c55e, #15803d);
+      color: #020617;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 8px 18px rgba(22, 163, 74, 0.75);
+    }
+
+    .lead-call-btn:disabled {
+      opacity: 0.5;
+      cursor: default;
+      box-shadow: none;
+    }
+
     .lead-field-block {
-      margin: 6px 0;
       display: flex;
       flex-direction: column;
       gap: 4px;
+      margin-top: 4px;
     }
 
     .lead-field-label {
@@ -451,14 +545,26 @@
       letter-spacing: 0.16em;
     }
 
+    .lead-field-input-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
     .lead-field-input {
-      width: 100%;
+      flex: 1;
       border-radius: 10px;
       border: 1px solid rgba(148, 163, 184, 0.4);
       background: rgba(15, 23, 42, 0.9);
       color: #e5e7eb;
       padding: 6px 8px;
       font-size: 12px;
+    }
+
+    .lead-field-date-tag {
+      font-size: 11px;
+      color: var(--text-muted);
+      white-space: nowrap;
     }
 
     .lead-toggle-row {
@@ -476,7 +582,6 @@
       letter-spacing: 0.16em;
     }
 
-    /* Bigger, more touch-friendly toggle buttons */
     .toggle-btn {
       border-radius: 999px;
       border: 1px solid rgba(255,255,255,0.28);
@@ -500,7 +605,6 @@
       color: #130202;
     }
 
-    /* Per-lead submit button */
     .lead-submit-btn {
       margin-top: 8px;
       width: 100%;
@@ -521,79 +625,28 @@
       box-shadow: none;
     }
 
-    /* ===== Availability tab ===== */
-
-    .availability-box {
-      border-radius: 16px;
-      border: 1px solid rgba(148, 163, 184, 0.35);
-      background: rgba(15, 23, 42, 0.92);
-      padding: 10px;
-      max-height: 320px;
-      overflow-y: auto;
-      font-size: 12px;
+    .status-indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      margin-left: 6px;
+      border: 1px solid rgba(15,23,42,0.9);
     }
 
-    .availability-slot {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 6px 8px;
+    .status-red   { background: #ef4444; }
+    .status-yellow{ background: #facc15; }
+    .status-green { background: #22c55e; }
+
+    .notes-textarea {
+      width: 100%;
       border-radius: 10px;
-      margin-bottom: 6px;
-      background: rgba(15, 23, 42, 0.98);
-      border: 1px solid rgba(30, 64, 175, 0.5);
-      transition: opacity 0.18s ease, border-color 0.18s ease, background 0.18s ease;
-    }
-
-    .availability-slot.unavailable {
-      opacity: 0.28;
-    }
-
-    .availability-slot-label {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .availability-slot-time {
-      font-size: 12px;
-    }
-
-    .availability-slot-meta {
-      font-size: 10px;
-      color: var(--text-muted);
-    }
-
-    .availability-slot-toggle {
-      font-size: 11px;
-      padding: 3px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.8);
-      background: transparent;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.9);
       color: #e5e7eb;
-      cursor: pointer;
-    }
-
-    .availability-slot-toggle.active {
-      background: #22c55e;
-      border-color: #4ade80;
-      color: #02120a;
-    }
-
-    .availability-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .nav-btn {
-      background: transparent;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.18);
-      padding: 5px 12px;
-      font-size: 0.85rem;
-      cursor: pointer;
+      padding: 6px 8px;
+      font-size: 12px;
+      min-height: 60px;
+      resize: vertical;
     }
   </style>
 </head>
@@ -643,9 +696,9 @@
             <div class="card-subtext">Till date</div>
           </article>
           <article class="card card--compact">
-            <div class="card-label">Meetings booked</div>
-            <div class="card-value" id="todayMeetings">0</div>
-            <div class="card-subtext">Total meetings</div>
+            <div class="card-label">My clients</div>
+            <div class="card-value" id="myClients">0</div>
+            <div class="card-subtext">Paid customers</div>
           </article>
         </div>
       </div>
@@ -663,9 +716,9 @@
             <div class="mini-sub">Paid customers</div>
           </div>
           <div class="mini-card">
-            <div class="mini-label">Meetings</div>
-            <div class="mini-value" id="todayMeetingsMini">0</div>
-            <div class="mini-sub">Booked today</div>
+            <div class="mini-label">My clients</div>
+            <div class="mini-value" id="myClientsMini">0</div>
+            <div class="mini-sub">Total clients</div>
           </div>
         </div>
 
@@ -678,29 +731,42 @@
 
     <!-- CALL SHEET TAB -->
     <main class="main" id="callSheetTab" style="display:none;">
-      <div class="section-label">Call sheet</div>
+      <div class="call-sheet-header">
+        <div class="section-label">Call sheet</div>
+        <input
+          type="text"
+          id="callSearchInput"
+          class="call-search-input"
+          placeholder="Search by business name or number"
+        />
+        <div class="call-sheet-controls">
+          <span class="filter-label">Sort</span>
+          <button class="filter-chip active" data-sort="default">Pending first</button>
+          <span class="filter-label">Filter</span>
+          <button class="filter-chip" data-filter="all">All</button>
+          <button class="filter-chip" data-filter="rejected">Rejected</button>
+          <button class="filter-chip" data-filter="confirmed">Confirmed</button>
+          <button class="filter-chip" data-filter="call_again">Call again</button>
+        </div>
+      </div>
       <div id="callSheetContainer">
         <div class="placeholder-box">Loading call sheet...</div>
       </div>
     </main>
 
-    <!-- CALENDAR TAB -->
-    <main class="main" id="calendarTab" style="display:none;">
-      <div class="section-label">Calendar availability</div>
-      <div id="availabilityContainer" class="availability-box">
-        Loading slots...
-      </div>
-      <div class="availability-actions">
-        <button id="editAvailabilityBtn" class="nav-btn">Edit</button>
-        <button id="saveAvailabilityBtn" class="nav-btn" disabled>Submit</button>
-      </div>
-    </main>
-
-    <!-- NOTES TAB -->
+    <!-- MY CLIENTS TAB -->
     <main class="main" id="notesTab" style="display:none;">
       <div class="section-label">My Clients</div>
-      <div class="placeholder-box">
-        Central notes area for each call, follow-ups, and meeting summaries.
+      <div class="call-sheet-header">
+        <input
+          type="text"
+          id="clientsSearchInput"
+          class="call-search-input"
+          placeholder="Search by business name or number"
+        />
+      </div>
+      <div id="myClientsContainer">
+        <div class="placeholder-box">Loading clients...</div>
       </div>
     </main>
   </div>
@@ -716,10 +782,6 @@
         <span class="icon">📁</span>
         <span>Call sheet</span>
       </button>
-      <button class="nav-item" data-tab="calendarTab" type="button">
-        <span class="icon">📆</span>
-        <span>Availability</span>
-      </button>
       <button class="nav-item" data-tab="notesTab" type="button">
         <span class="icon">🛍️</span>
         <span>My Clients</span>
@@ -727,356 +789,718 @@
     </nav>
   </div>
 
-  <script>
-    // ===== CONFIG: YOUR WEB APP URL =====
-    const WEB_APP_BASE = 'https://script.google.com/macros/s/AKfycbx_lKpELjqhIR9LeeQJDNtg4YzFEf2KW5JP6vTpvv0_ruo2yWJPUQ968iLNVdbJfn3Xhw/exec';
+ <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://azhahzauienluwksfnpd.supabase.co';
+  const SUPABASE_ANON_KEY =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF6aGFoemF1aWVubHV3a3NmbnBkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5ODQyNTcsImV4cCI6MjA4MzU2MDI1N30.qDusd_t2to97drn6DjEeyvnO9_Jh3WyXt-LborK7dPw';
 
-    // ===== URL PARAMS: SHEET NAME FROM LOGIN REDIRECT =====
-    const urlParams = new URLSearchParams(window.location.search);
-    const SHEET_NAME = urlParams.get('sheet') || '';
-    document.getElementById('userNameDisplay').textContent = SHEET_NAME || 'Agent';
+  const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const SLOT_DURATION_MIN = 40;
 
-    // ===== DASHBOARD LOAD =====
-    async function loadDashboard() {
-      if (!SHEET_NAME) return;
-      const url = `${WEB_APP_BASE}?action=dashboard&sheet=${encodeURIComponent(SHEET_NAME)}`;
-      try {
-        const res = await fetch(url);
-        const data = await res.json();
-        if (!data.ok) return;
+  let currentUser = null;
+  let currentUserId = null;
 
-        const d = data.dashboard || {};
-        document.getElementById('totalEarnings').textContent = '₹' + (d.totalEarnings || 0);
-        document.getElementById('pendingEarnings').textContent = '₹' + (d.pendingEarnings || 0);
-        document.getElementById('totalCalls').textContent = d.totalCalls || 0;
-        document.getElementById('todayMeetings').textContent = d.todayMeetings || 0;
-        document.getElementById('todayCalls').textContent = d.todayCalls || 0;
-        document.getElementById('confirmedProjects').textContent = d.confirmedProjects || 0;
-        document.getElementById('todayMeetingsMini').textContent = d.todayMeetings || 0;
-      } catch (err) {
-        console.error('Error loading dashboard', err);
-      }
+  async function loadCurrentUser() {
+    const usernameKey = sessionStorage.getItem('username') || '';
+    if (!usernameKey) {
+      document.getElementById('userNameDisplay').textContent = 'Agent';
+      return;
     }
 
-    // ===== CALL SHEET LOGIC =====
-    let callRows = [];
+    const { data, error } = await sbClient
+      .from('users')
+      .select('*')
+      .eq('sheet_name', usernameKey)
+      .single();
 
-    async function loadCallSheet() {
-      const container = document.getElementById('callSheetContainer');
-      container.innerHTML = '<div class="placeholder-box">Loading call sheet...</div>';
+    if (error || !data) {
+      console.error('Error loading current user', error);
+      document.getElementById('userNameDisplay').textContent = usernameKey;
+      return;
+    }
 
-      if (!SHEET_NAME) {
-        container.innerHTML = '<div class="placeholder-box">No sheet selected.</div>';
+    currentUser = data;
+    currentUserId = data.id;
+    document.getElementById('userNameDisplay').textContent = data.agent_name;
+  }
+
+  async function loadDashboard() {
+    if (!currentUserId) return;
+
+    const { data: calls, error } = await sbClient
+      .from('agent_calls')
+      .select('*')
+      .eq('user_id', currentUserId);
+
+    if (error) {
+      console.error('Error loading dashboard', error);
+      return;
+    }
+
+    const todayStr = new Date().toISOString().slice(0, 10);
+
+    let totalEarnings = 0;
+    let pendingEarnings = 0;
+    let totalCalls = 0;
+    let todayCalls = 0;
+    let confirmedProjects = 0;
+    let myClients = 0;
+
+    calls.forEach(row => {
+      const isPaid = !!row.paid;
+      const commission = Number(row.commission || 0);
+      const isCompleted = !!row.project_completed;
+      const callDate = row.call_date ? String(row.call_date).slice(0, 10) : null;
+
+      const statusText = (row.call_status || '').toLowerCase().trim();
+      const isCallDone = statusText && statusText !== 'pending';
+
+      if (isCallDone) {
+        totalCalls += 1;
+        if (callDate === todayStr) {
+          todayCalls += 1;
+        }
+      }
+
+      if (isCompleted) {
+        confirmedProjects += 1;
+      }
+
+      const customerPaidAmount = Number(row.customer_paid || 0);
+      if (customerPaidAmount > 0) {
+        myClients += 1;
+      }
+
+      if (!isNaN(commission) && commission > 0) {
+        if (!isPaid && customerPaidAmount > 0) {
+          pendingEarnings += commission;
+        }
+        if (isPaid) {
+          totalEarnings += commission;
+        }
+      }
+    });
+
+    document.getElementById('totalEarnings').textContent = '₹' + totalEarnings;
+    document.getElementById('pendingEarnings').textContent = '₹' + pendingEarnings;
+    document.getElementById('totalCalls').textContent = totalCalls;
+    document.getElementById('todayCalls').textContent = todayCalls;
+    document.getElementById('confirmedProjects').textContent = confirmedProjects;
+    document.getElementById('myClients').textContent = myClients;
+    document.getElementById('myClientsMini').textContent = myClients;
+  }
+
+  let callRows = [];
+  let filteredCallRows = [];
+  let clientRows = [];
+  let filteredClientRows = [];
+  let currentFilter = 'all';
+  let currentSortMode = 'default';
+
+  function isSlotAvailableForUser(candidateIso, currentLeadId) {
+    if (!candidateIso) return true;
+    const start = new Date(candidateIso).getTime();
+    const end = start + SLOT_DURATION_MIN * 60 * 1000;
+
+    for (const row of callRows) {
+      if (!row.time_slot) continue;
+      if (row.id === currentLeadId) continue;
+
+      const rStart = new Date(row.time_slot).getTime();
+      const rEnd = rStart + SLOT_DURATION_MIN * 60 * 1000;
+
+      if (start < rEnd && end > rStart) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function computeStatusClass(lead) {
+    const booked = !!lead.booked;
+    const customerPaid = Number(lead.customer_paid || 0);
+    if (!booked) return 'status-red';
+    if (booked && customerPaid <= 0) return 'status-yellow';
+    if (customerPaid > 0) return 'status-green';
+    return 'status-red';
+  }
+
+  function normalizeYesNo(val) {
+    if (val === true) return 'yes';
+    if (val === false) return 'no';
+    if (val == null) return '';
+    const s = String(val).toLowerCase().trim();
+    if (s === 'yes') return 'yes';
+    if (s === 'no') return 'no';
+    return '';
+  }
+
+  function getCallCategory(lead) {
+    const callStatus = normalizeYesNo(lead.call_status);
+    const callAgain = normalizeYesNo(lead.call_again);
+    const booked = !!lead.booked;
+
+    if (callStatus === 'yes' && callAgain === 'no' && !booked) return 'rejected';
+    if (callStatus === 'yes' && callAgain === 'yes' && booked) return 'confirmed';
+    if (callStatus === 'yes' && callAgain === 'yes' && !booked) return 'call_again';
+    return 'other';
+  }
+
+  function getSortWeight(lead) {
+    const callStatus = normalizeYesNo(lead.call_status);
+    const customerPaid = Number(lead.customer_paid || 0);
+    const completed = !!lead.project_completed || customerPaid > 0;
+
+    if (!callStatus) return 0;
+    if (callStatus === 'no') return 1;
+    if (!completed) return 2;
+    return 3;
+  }
+
+  function applyFilterAndSort() {
+    let rows = (callRows || []).filter(r => {
+      const name = (r.business_name || '').trim();
+      const num = (r.business_number || '').toString().trim();
+      const link = (r.links || '').trim();
+      return name || num || link;
+    });
+
+    if (currentFilter !== 'all') {
+      rows = rows.filter(r => getCallCategory(r) === currentFilter);
+    }
+
+    if (currentSortMode === 'default') {
+      rows.sort((a, b) => {
+        const wa = getSortWeight(a);
+        const wb = getSortWeight(b);
+        if (wa !== wb) return wa - wb;
+        const da = a.call_date ? new Date(a.call_date).getTime() : 0;
+        const db = b.call_date ? new Date(b.call_date).getTime() : 0;
+        return da - db;
+      });
+    }
+
+    filteredCallRows = rows;
+  }
+
+  async function loadCallSheet() {
+    const container = document.getElementById('callSheetContainer');
+    container.innerHTML = '<div class="placeholder-box">Loading call sheet...</div>';
+
+    if (!currentUserId) {
+      container.innerHTML = '<div class="placeholder-box">User not loaded.</div>';
+      return;
+    }
+
+    const { data, error } = await sbClient
+      .from('agent_calls')
+      .select('*')
+      .eq('user_id', currentUserId)
+      .order('call_date', { ascending: true });
+
+    if (error) {
+      console.error(error);
+      container.innerHTML = '<div class="placeholder-box">Error loading call sheet.</div>';
+      return;
+    }
+
+    callRows = data || [];
+
+    applyFilterAndSort();
+
+    if (!filteredCallRows.length) {
+      container.innerHTML = '<div class="placeholder-box">No leads in call sheet.</div>';
+      return;
+    }
+
+    renderCallSheetStrip();
+  }
+
+  function renderCallSheetStrip() {
+    const container = document.getElementById('callSheetContainer');
+    if (!filteredCallRows.length) {
+      container.innerHTML = '<div class="placeholder-box">No matching leads.</div>';
+      return;
+    }
+
+    const strip = document.createElement('div');
+    strip.className = 'call-sheet-strip';
+
+    filteredCallRows.forEach((lead, index) => {
+      const card = createLeadCard(lead, index);
+      strip.appendChild(card);
+    });
+
+    container.innerHTML = '';
+    container.appendChild(strip);
+  }
+
+  function createLeadCard(lead, index) {
+    const card = document.createElement('div');
+    card.className = 'lead-card';
+    card.dataset.index = index;
+    card.dataset.dirty = 'false';
+
+    const businessName = lead.business_name || 'No name';
+    const phoneNumber = lead.business_number || '';
+    const phoneText = phoneNumber ? phoneNumber : 'No number';
+    const phoneHref = phoneNumber ? `tel:${phoneNumber}` : '#';
+    const linkHref = lead.links || '#';
+
+    let timeSlotValue = '';
+    let dateTagText = '';
+
+    if (lead.time_slot) {
+      const d = new Date(lead.time_slot);
+      timeSlotValue = d.toISOString().slice(0, 16);
+      dateTagText = d.toISOString().slice(0, 10);
+    }
+
+    const statusClass = computeStatusClass(lead);
+
+    card.innerHTML = `
+      <div class="lead-header">
+        <div class="lead-business-row">
+          <div class="lead-business">
+            ${businessName}
+            <span class="status-indicator ${statusClass}" data-role="status-indicator"></span>
+          </div>
+          <a href="${linkHref}" target="_blank" class="lead-link">
+            ${lead.links ? 'Open link' : 'No link'}
+          </a>
+        </div>
+
+        <div class="lead-phone-row">
+          <div class="lead-phone-text">${phoneText}</div>
+          <button class="lead-call-btn" type="button" ${phoneNumber ? '' : 'disabled'}>
+            <span>📞</span><span>Call</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="lead-field-block">
+        <div class="lead-field-label">Meeting slot</div>
+        <div class="lead-field-input-row">
+          <input
+            type="datetime-local"
+            class="lead-field-input"
+            data-field="time_slot"
+            value="${timeSlotValue}"
+          >
+          <span class="lead-field-date-tag" data-role="date-tag">
+            ${dateTagText || 'Today'}
+          </span>
+        </div>
+      </div>
+
+      <div class="lead-toggle-row">
+        <span class="lead-toggle-label">Call status</span>
+        <button class="toggle-btn" data-field="call_status" data-value="yes">Yes</button>
+        <button class="toggle-btn" data-field="call_status" data-value="no">No</button>
+      </div>
+
+      <div class="lead-toggle-row">
+        <span class="lead-toggle-label">Call again</span>
+        <button class="toggle-btn" data-field="call_again" data-value="yes">Yes</button>
+        <button class="toggle-btn" data-field="call_again" data-value="no">No</button>
+      </div>
+
+      <div class="lead-toggle-row">
+        <span class="lead-toggle-label">Booked</span>
+        <button class="toggle-btn" data-field="booked" data-value="yes">Yes</button>
+        <button class="toggle-btn" data-field="booked" data-value="no">No</button>
+      </div>
+
+      <div class="lead-field-block">
+        <div class="lead-field-label">Notes</div>
+        <textarea class="notes-textarea" data-field="notes">${lead.notes || ''}</textarea>
+      </div>
+
+      <button class="lead-submit-btn" type="button" disabled>Submit changes</button>
+    `;
+
+    applyToggleStateInCard(card, 'call_status', lead.call_status);
+    applyToggleStateInCard(card, 'call_again', lead.call_again);
+    applyToggleStateInCard(card, 'booked', lead.booked);
+
+    const submitBtn = card.querySelector('.lead-submit-btn');
+    const callBtn = card.querySelector('.lead-call-btn');
+    const statusIndicator = card.querySelector('[data-role="status-indicator"]');
+
+    function markDirty() {
+      card.dataset.dirty = 'true';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit changes';
+    }
+
+    function refreshStatusIndicator() {
+      const cls = computeStatusClass(lead);
+      statusIndicator.className = 'status-indicator ' + cls;
+    }
+
+    if (callBtn && phoneNumber) {
+      callBtn.addEventListener('click', () => {
+        window.location.href = phoneHref;
+      });
+    }
+
+    const slotInput = card.querySelector('input[data-field="time_slot"]');
+    const dateTag = card.querySelector('[data-role="date-tag"]');
+
+    slotInput.addEventListener('change', (e) => {
+      let value = e.target.value;
+
+      if (!value) {
+        lead.time_slot = null;
+        dateTag.textContent = 'Today';
+        markDirty();
         return;
       }
 
-      const url = `${WEB_APP_BASE}?action=getCallSheet&sheet=${encodeURIComponent(SHEET_NAME)}`;
+      const hasDate = value.includes('T');
+      if (!hasDate) {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        value = `${yyyy}-${mm}-${dd}T${value}`;
+        slotInput.value = value;
+      }
+
+      const iso = new Date(value).toISOString();
+
+      if (!isSlotAvailableForUser(iso, lead.id)) {
+        alert('This time slot overlaps another booking for this user. Please choose another time.');
+        slotInput.value = lead.time_slot ? new Date(lead.time_slot).toISOString().slice(0, 16) : '';
+        return;
+      }
+
+      lead.time_slot = iso;
+
+      const d = new Date(iso);
+      dateTag.textContent = d.toISOString().slice(0, 10);
+
+      markDirty();
+    });
+
+    const notesInput = card.querySelector('textarea[data-field="notes"]');
+    notesInput.addEventListener('input', (e) => {
+      lead.notes = e.target.value;
+      markDirty();
+    });
+
+    card.addEventListener('click', (e) => {
+      if (!e.target.classList.contains('toggle-btn')) return;
+
+      const btn = e.target;
+      const field = btn.dataset.field;
+      const value = btn.dataset.value;
+
+      card
+        .querySelectorAll(`.toggle-btn[data-field="${field}"]`)
+        .forEach(b => b.classList.remove('active'));
+
+      btn.classList.add('active');
+
+      if (field === 'call_status') {
+        lead.call_status = value;
+      } else {
+        const boolValue = value === 'yes';
+        lead[field] = boolValue;
+        if (field === 'booked') {
+          refreshStatusIndicator();
+        }
+      }
+
+      markDirty();
+    });
+
+    submitBtn.addEventListener('click', async () => {
+      if (card.dataset.dirty !== 'true') return;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Saving...';
 
       try {
-        const res = await fetch(url);
-        const data = await res.json();
-
-        callRows = (data.rows || []).filter(r => r.businessName || r.bNumber || r.link);
-
-        if (!callRows.length) {
-          container.innerHTML = '<div class="placeholder-box">No leads in call sheet.</div>';
-          return;
-        }
-
-        container.innerHTML = '';
-        callRows.forEach((lead, index) => {
-          const card = createLeadCard(lead, index);
-          container.appendChild(card);
-        });
+        await submitLeadChanges(lead);
+        card.dataset.dirty = 'false';
+        submitBtn.textContent = 'Saved';
+        await loadDashboard();
+        await loadMyClients();
+        applyFilterAndSort();
+        renderCallSheetStrip();
       } catch (err) {
-        console.error(err);
-        container.innerHTML = '<div class="placeholder-box">Error loading call sheet.</div>';
-      }
-    }
-
-    function createLeadCard(lead, index) {
-      const card = document.createElement('div');
-      card.className = 'lead-card';
-      card.dataset.index = index;
-      card.dataset.dirty = 'false';
-
-      const businessName = lead.businessName || 'No name';
-      const phoneText = lead.bNumber ? `📞 ${lead.bNumber}` : 'No number';
-      const phoneHref = lead.bNumber ? `tel:${lead.bNumber}` : '#';
-      const linkHref = lead.link || '#';
-
-      card.innerHTML = `
-        <div class="lead-header">
-          <div class="lead-business">${businessName}</div>
-          <a href="${phoneHref}" class="lead-phone">${phoneText}</a>
-        </div>
-
-        <div class="lead-meta-row">
-          <span class="lead-meta-label">Location link</span>
-          <a href="${linkHref}" target="_blank" class="lead-link">${lead.link ? 'Open link' : 'No link'}</a>
-        </div>
-
-        <div class="lead-field-block">
-          <div class="lead-field-label">Meeting slot</div>
-          <input type="datetime-local" class="lead-field-input" data-field="Time Slot" value="${lead.timeSlot || ''}">
-        </div>
-
-        <div class="lead-toggle-row">
-          <span class="lead-toggle-label">Call status</span>
-          <button class="toggle-btn" data-field="Calls Status" data-value="yes">Yes</button>
-          <button class="toggle-btn" data-field="Calls Status" data-value="no">No</button>
-        </div>
-
-        <div class="lead-toggle-row">
-          <span class="lead-toggle-label">Call again</span>
-          <button class="toggle-btn" data-field="Call Again" data-value="yes">Yes</button>
-          <button class="toggle-btn" data-field="Call Again" data-value="no">No</button>
-        </div>
-
-        <div class="lead-toggle-row">
-          <span class="lead-toggle-label">Booked</span>
-          <button class="toggle-btn" data-field="Booked" data-value="yes">Yes</button>
-          <button class="toggle-btn" data-field="Booked" data-value="no">No</button>
-        </div>
-
-        <button class="lead-submit-btn" type="button" disabled>Submit changes</button>
-      `;
-
-      // Apply initial toggle state
-      applyToggleStateInCard(card, 'Calls Status', lead.callsStatus);
-      applyToggleStateInCard(card, 'Call Again', lead.callAgain);
-      applyToggleStateInCard(card, 'Booked', lead.booked);
-
-      const submitBtn = card.querySelector('.lead-submit-btn');
-
-      function markDirty() {
-        card.dataset.dirty = 'true';
+        console.error('Error saving lead', err);
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Submit changes';
-      }
-
-      // Meeting slot change
-      const slotInput = card.querySelector('input[data-field="Time Slot"]');
-      slotInput.addEventListener('change', (e) => {
-        const value = e.target.value;
-        lead.timeSlot = value;
-        markDirty();
-      });
-
-      // Toggle buttons
-      card.addEventListener('click', (e) => {
-        if (!e.target.classList.contains('toggle-btn')) return;
-
-        const btn = e.target;
-        const field = btn.dataset.field;
-        const value = btn.dataset.value;
-
-        card
-          .querySelectorAll(`.toggle-btn[data-field="${field}"]`)
-          .forEach(b => b.classList.remove('active'));
-
-        btn.classList.add('active');
-
-        if (field === 'Calls Status') lead.callsStatus = value;
-        if (field === 'Call Again') lead.callAgain = value;
-        if (field === 'Booked') lead.booked = value;
-
-        markDirty();
-      });
-
-      // Submit button click → send all changed fields for that lead
-      submitBtn.addEventListener('click', async () => {
-        if (card.dataset.dirty !== 'true') return;
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Saving...';
-
-        try {
-          await submitLeadChanges(lead);
-          card.dataset.dirty = 'false';
-          submitBtn.textContent = 'Saved';
-        } catch (err) {
-          console.error('Error saving lead', err);
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'Retry save';
+        if (err && err.message === 'SLOT_CONFLICT') {
+          alert('This slot was booked by someone else. Please pick another time slot.');
+        } else {
           alert('Error saving lead. Please try again.');
         }
-      });
+        submitBtn.textContent = 'Retry save';
+      }
+    });
 
-      return card;
-    }
+    return card;
+  }
 
-    function applyToggleStateInCard(card, fieldName, value) {
-      if (!value) return;
-      const selector = `.toggle-btn[data-field="${fieldName}"][data-value="${String(value).toLowerCase()}"]`;
+  function applyToggleStateInCard(card, fieldName, value) {
+    if (value === null || value === undefined) return;
+
+    if (fieldName === 'call_status') {
+      const txt = String(value).toLowerCase().trim();
+      const yesNo = (txt === 'yes') ? 'yes' : (txt === 'no' ? 'no' : null);
+      if (!yesNo) return;
+      const selector = `.toggle-btn[data-field="${fieldName}"][data-value="${yesNo}"]`;
+      const btn = card.querySelector(selector);
+      if (btn) btn.classList.add('active');
+    } else {
+      const yesNo = value ? 'yes' : 'no';
+      const selector = `.toggle-btn[data-field="${fieldName}"][data-value="${yesNo}"]`;
       const btn = card.querySelector(selector);
       if (btn) btn.classList.add('active');
     }
+  }
 
-    async function submitLeadChanges(lead) {
-  if (!SHEET_NAME) return;
+  async function submitLeadChanges(lead) {
+    if (!currentUserId) return;
 
-  const updates = [
-    { field: 'Time Slot', value: lead.timeSlot || '' },
-    { field: 'Calls Status', value: lead.callsStatus || '' },
-    { field: 'Call Again', value: lead.callAgain || '' },
-    { field: 'Booked', value: lead.booked || '' },
-  ];
+    // Reload full rows to keep UI data intact
+    const { data: latest, error: latestErr } = await sbClient
+      .from('agent_calls')
+      .select('*')
+      .eq('user_id', currentUserId);
 
-  const validUpdates = updates.filter(u => u.field && (u.value !== undefined));
+    if (latestErr) throw latestErr;
 
-  for (const upd of validUpdates) {
-    const payload = {
-      rowNumber: lead.rowNumber,
-      field: upd.field,
-      value: upd.value,
-      sheet: SHEET_NAME
+    callRows = latest || [];
+
+    if (lead.time_slot && !isSlotAvailableForUser(lead.time_slot, lead.id)) {
+      const conflictError = new Error('SLOT_CONFLICT');
+      throw conflictError;
+    }
+
+    const updates = {
+      time_slot: lead.time_slot || null,
+      call_status: lead.call_status || 'pending',
+      call_again: !!lead.call_again,
+      booked: !!lead.booked,
+      notes: lead.notes || null
     };
 
-    console.log('Submitting updateCallField payload:', payload);
+    const { error } = await sbClient
+      .from('agent_calls')
+      .update(updates)
+      .eq('id', lead.id)
+      .eq('user_id', currentUserId);
 
-    const res = await fetch(`${WEB_APP_BASE}?action=updateCallField`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-
-    const data = await res.json();
-    console.log('updateCallField response:', data);
-
-    if (!data.ok) {
-      throw new Error(data.message || 'updateCallField failed');
-    }
+    if (error) throw error;
   }
-}
-    // ===== AVAILABILITY LOGIC =====
-    let availabilitySlots = [];
-    let availabilityEditMode = false;
 
-    async function loadAvailability() {
-      const container = document.getElementById('availabilityContainer');
-      container.textContent = 'Loading slots...';
+  async function loadMyClients() {
+    const container = document.getElementById('myClientsContainer');
+    if (!container) return;
 
-      try {
-        const res = await fetch(`${WEB_APP_BASE}?action=getAvailability`);
-        const data = await res.json();
+    container.innerHTML = '<div class="placeholder-box">Loading clients...</div>';
 
-        if (!data.ok) {
-          container.textContent = data.message || 'Error loading slots.';
-          return;
-        }
-
-        availabilitySlots = data.slots || [];
-
-        if (!availabilitySlots.length) {
-          container.textContent = 'No slots configured.';
-          return;
-        }
-
-        renderAvailabilitySlots();
-      } catch (err) {
-        console.error(err);
-        container.textContent = 'Error loading slots.';
-      }
+    if (!currentUserId) {
+      container.innerHTML = '<div class="placeholder-box">User not loaded.</div>';
+      return;
     }
 
-    function renderAvailabilitySlots() {
-      const container = document.getElementById('availabilityContainer');
-      container.innerHTML = '';
+    const { data, error } = await sbClient
+      .from('agent_calls')
+      .select('*')
+      .eq('user_id', currentUserId)
+      .gt('customer_paid', 0)
+      .order('call_date', { ascending: true });
 
-      availabilitySlots.forEach((slot, idx) => {
-        const div = document.createElement('div');
-        div.className = 'availability-slot';
-        if (!slot.available) div.classList.add('unavailable');
-        div.dataset.index = idx;
+    if (error) {
+      console.error(error);
+      container.innerHTML = '<div class="placeholder-box">Error loading clients.</div>';
+      return;
+    }
 
-        const label = slot.label || slot.time || 'Slot';
+    clientRows = data || [];
+    filteredClientRows = [...clientRows];
 
-        div.innerHTML = `
-          <div class="availability-slot-label">
-            <span class="availability-slot-time">${label}</span>
-            <span class="availability-slot-meta">${slot.available ? 'Available' : 'Not available'}</span>
+    renderMyClientsStrip();
+  }
+
+  function renderMyClientsStrip() {
+    const container = document.getElementById('myClientsContainer');
+    if (!filteredClientRows.length) {
+      container.innerHTML = '<div class="placeholder-box">No clients yet.</div>';
+      return;
+    }
+
+    const strip = document.createElement('div');
+    strip.className = 'call-sheet-strip';
+
+    filteredClientRows.forEach((lead) => {
+      const card = document.createElement('div');
+      card.className = 'lead-card';
+
+      const businessName = lead.business_name || 'No name';
+      const phoneNumber = lead.business_number || '';
+      const phoneText = phoneNumber ? phoneNumber : 'No number';
+      const linkHref = lead.links || '#';
+      const customerPaidAmount = Number(lead.customer_paid || 0);
+      const statusClass = computeStatusClass(lead) || 'status-red';
+
+      card.innerHTML = `
+        <div class="lead-header">
+          <div class="lead-business-row">
+            <div class="lead-business">
+              ${businessName}
+              <span class="status-indicator ${statusClass}"></span>
+            </div>
+            <a href="${linkHref}" target="_blank" class="lead-link">
+              ${lead.links ? 'Open link' : 'No link'}
+            </a>
           </div>
-          <button class="availability-slot-toggle ${slot.available ? 'active' : ''}">
-            ${slot.available ? 'Available' : 'Off'}
-          </button>
-        `;
 
-        const btn = div.querySelector('.availability-slot-toggle');
-        btn.addEventListener('click', () => {
-          if (!availabilityEditMode) return;
-          slot.available = !slot.available;
-          renderAvailabilitySlots();
-          document.getElementById('saveAvailabilityBtn').disabled = false;
+          <div class="lead-phone-row">
+            <div class="lead-phone-text">${phoneText}</div>
+            <div class="lead-field-date-tag">
+              Paid: ₹${customerPaidAmount}
+            </div>
+          </div>
+        </div>
+
+        <div class="lead-field-block">
+          <div class="lead-field-label">Notes</div>
+          <div class="notes-textarea" style="min-height:40px;">${lead.notes || 'No notes'}</div>
+        </div>
+      `;
+      strip.appendChild(card);
+    });
+
+    container.innerHTML = '';
+    container.appendChild(strip);
+  }
+
+  function initTabs() {
+    const tabs = ['homeTab', 'callSheetTab', 'notesTab'];
+    const navButtons = document.querySelectorAll('.nav-item');
+
+    navButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.getAttribute('data-tab');
+        tabs.forEach(id => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          el.style.display = (id === target) ? 'flex' : 'none';
         });
+        navButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
 
-        container.appendChild(div);
-      });
-    }
-
-    async function saveAvailabilityChanges() {
-      const updates = availabilitySlots.map(s => ({
-        rowNumber: s.rowNumber,
-        available: !!s.available
-      }));
-
-      try {
-        const res = await fetch(`${WEB_APP_BASE}?action=updateAvailability`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ slots: updates })
-        });
-        const data = await res.json();
-        if (!data.ok) {
-          alert(data.message || 'Failed to save slots');
-          return;
+        if (target === 'callSheetTab') {
+          loadCallSheet();
         }
-        availabilityEditMode = false;
-        document.getElementById('saveAvailabilityBtn').disabled = true;
-        renderAvailabilitySlots();
-      } catch (err) {
-        console.error(err);
-        alert('Error saving availability');
-      }
-    }
-
-    // ===== TAB NAVIGATION =====
-    function initTabs() {
-      const tabs = ['homeTab', 'callSheetTab', 'calendarTab', 'notesTab'];
-      const navButtons = document.querySelectorAll('.nav-item');
-
-      navButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const target = btn.getAttribute('data-tab');
-          tabs.forEach(id => {
-            document.getElementById(id).style.display = (id === target) ? 'flex' : 'none';
-          });
-          navButtons.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-
-          if (target === 'callSheetTab') {
-            loadCallSheet();
-          }
-          if (target === 'calendarTab') {
-            loadAvailability();
-          }
-        });
-      });
-    }
-
-    // ===== EVENT BINDINGS =====
-    document.addEventListener('DOMContentLoaded', () => {
-      loadDashboard();
-      initTabs();
-
-      document.getElementById('editAvailabilityBtn').addEventListener('click', () => {
-        availabilityEditMode = !availabilityEditMode;
-        document.getElementById('saveAvailabilityBtn').disabled = !availabilityEditMode;
-      });
-
-      document.getElementById('saveAvailabilityBtn').addEventListener('click', () => {
-        saveAvailabilityChanges();
+        if (target === 'homeTab') {
+          loadDashboard();
+        }
+        if (target === 'notesTab') {
+          loadMyClients();
+        }
       });
     });
-  </script>
+  }
+
+  function initCallSearch() {
+    const input = document.getElementById('callSearchInput');
+    if (!input) return;
+
+    input.addEventListener('input', () => {
+      const q = input.value.trim().toLowerCase();
+
+      applyFilterAndSort();
+
+      if (q) {
+        filteredCallRows = filteredCallRows.filter(row => {
+          const name = String(row.business_name || '').toLowerCase();
+          const num = String(row.business_number || '').toLowerCase();
+          return name.includes(q) || num.includes(q);
+        });
+      }
+
+      renderCallSheetStrip();
+    });
+  }
+
+  function initClientsSearch() {
+    const input = document.getElementById('clientsSearchInput');
+    if (!input) return;
+
+    input.addEventListener('input', () => {
+      const q = input.value.trim().toLowerCase();
+      if (!q) {
+        filteredClientRows = [...clientRows];
+      } else {
+        filteredClientRows = clientRows.filter(row => {
+          const name = String(row.business_name || '').toLowerCase();
+          const num = String(row.business_number || '').toLowerCase();
+          return name.includes(q) || num.includes(q);
+        });
+      }
+      renderMyClientsStrip();
+    });
+  }
+
+  function initCallFilters() {
+    const container = document.querySelector('.call-sheet-controls');
+    if (!container) return;
+
+    const filterChips = container.querySelectorAll('[data-filter]');
+    const sortChips = container.querySelectorAll('[data-sort]');
+
+    filterChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        filterChips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        currentFilter = chip.dataset.filter;
+        const q = (document.getElementById('callSearchInput')?.value || '').trim().toLowerCase();
+        applyFilterAndSort();
+        if (q) {
+          filteredCallRows = filteredCallRows.filter(row => {
+            const name = String(row.business_name || '').toLowerCase();
+            const num = String(row.business_number || '').toLowerCase();
+            return name.includes(q) || num.includes(q);
+          });
+        }
+        renderCallSheetStrip();
+      });
+    });
+
+    sortChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        sortChips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        currentSortMode = chip.dataset.sort;
+        const q = (document.getElementById('callSearchInput')?.value || '').trim().toLowerCase();
+        applyFilterAndSort();
+        if (q) {
+          filteredCallRows = filteredCallRows.filter(row => {
+            const name = String(row.business_name || '').toLowerCase();
+            const num = String(row.business_number || '').toLowerCase();
+            return name.includes(q) || num.includes(q);
+          });
+        }
+        renderCallSheetStrip();
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    await loadCurrentUser();
+    await loadDashboard();
+    initTabs();
+    initCallSearch();
+    initClientsSearch();
+    initCallFilters();
+  });
+</script>
+
 </body>
 </html>
