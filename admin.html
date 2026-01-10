@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>NovaStack – Admin Dashboard</title>
+  <button id="adminLogoutBtn" class="btn-outline" type="button">
+  Logout
+</button>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #020617;
+      --panel: #02091f;
+      --panel-soft: #020b2a;
+      --border: #1f2937;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.15);
+      --danger: #f97373;
+      --success: #22c55e;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --radius: 10px;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text","Inter",sans-serif;
+      background:
+        radial-gradient(circle at top left,#0b102d 0,transparent 55%),
+        radial-gradient(circle at top right,#020917 0,transparent 55%),
+        linear-gradient(135deg,#020617,#020817);
+      color: var(--text);
+      min-height:100vh;
+      padding:16px 20px;
+    }
+    h1 { font-size:22px; margin-bottom:4px; }
+    .sub { font-size:12px; color:var(--muted); margin-bottom:16px; }
+
+    .layout {
+      display:grid;
+      grid-template-columns: 360px 1fr;
+      gap:16px;
+      align-items:flex-start;
+    }
+    @media (max-width:1000px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+    .panel {
+      background: linear-gradient(145deg, var(--panel), var(--panel-soft));
+      border-radius: 14px;
+      border:1px solid var(--border);
+      padding:12px 14px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.8);
+    }
+    .panel h2 {
+      font-size:13px;
+      letter-spacing:0.18em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:10px;
+    }
+    .field {
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      margin-bottom:8px;
+    }
+    .field label {
+      font-size:12px;
+      color:var(--muted);
+    }
+    .field input, .field select, .field textarea {
+      border-radius:8px;
+      border:1px solid #374151;
+      background:#020617;
+      color:var(--text);
+      padding:6px 8px;
+      font-size:13px;
+      outline:none;
+    }
+    .field textarea { min-height:60px; resize:vertical; }
+    button {
+      border-radius:999px;
+      border:none;
+      padding:7px 12px;
+      font-size:13px;
+      font-weight:500;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+    }
+    .btn-primary {
+      background:linear-gradient(135deg,#38bdf8,#2563eb);
+      color:#020617;
+    }
+    .btn-outline {
+      background:transparent;
+      color:var(--muted);
+      border:1px solid #4b5563;
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:11px;
+    }
+    .btn-danger {
+      background:#b91c1c;
+      color:#fee2e2;
+    }
+    .table-wrap {
+      margin-top:8px;
+      border-radius:10px;
+      border:1px solid var(--border);
+      overflow:auto;
+      max-height:420px;
+    }
+    table {
+      width:100%;
+      border-collapse:collapse;
+      font-size:12px;
+    }
+    thead {
+      background:#020617;
+      position:sticky;
+      top:0;
+      z-index:1;
+    }
+    th, td {
+      padding:6px 8px;
+      border-bottom:1px solid #111827;
+      text-align:left;
+      white-space:nowrap;
+    }
+    th {
+      font-weight:500;
+      color:var(--muted);
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:0.12em;
+    }
+    tr:nth-child(even) td {
+      background:rgba(15,23,42,0.7);
+    }
+    .tag {
+      display:inline-flex;
+      align-items:center;
+      padding:2px 6px;
+      border-radius:999px;
+      font-size:11px;
+      border:1px solid rgba(148,163,184,0.5);
+      color:var(--muted);
+    }
+    .pill-filter-group {
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin-bottom:8px;
+      align-items:center;
+    }
+    .pill {
+      border-radius:999px;
+      border:1px solid #4b5563;
+      padding:4px 9px;
+      font-size:11px;
+      color:var(--muted);
+      cursor:pointer;
+      background:transparent;
+    }
+    .pill.active {
+      border-color:var(--accent);
+      background:var(--accent-soft);
+      color:#e0f2fe;
+    }
+    .flex { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    .mt-8 { margin-top:8px; }
+    .mt-10 { margin-top:10px; }
+    .mt-12 { margin-top:12px; }
+    .text-right { text-align:right; }
+    .input-inline {
+      width:84px;
+      border-radius:6px;
+      border:1px solid #4b5563;
+      background:#020617;
+      color:var(--text);
+      padding:3px 5px;
+      font-size:11px;
+    }
+    .status-text {
+      margin-top:8px;
+      min-height:18px;
+      font-size:12px;
+    }
+    .status-text.ok { color:var(--success); }
+    .status-text.error { color:var(--danger); }
+    .preview-box {
+      margin-top:8px;
+      border-radius:10px;
+      border:1px dashed rgba(148,163,184,0.6);
+      padding:6px;
+      font-size:11px;
+      color:var(--muted);
+      max-height:120px;
+      overflow:auto;
+    }
+
+    /* Create user card styling (reused from your page) */
+    .login-badge {
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:4px 10px;
+      border-radius:999px;
+      background:rgba(15,23,42,0.9);
+      border:1px solid rgba(148,163,184,0.45);
+      color:var(--muted);
+      font-size:11px;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      margin-bottom:8px;
+    }
+    .login-badge-dot {
+      width:7px;
+      height:7px;
+      border-radius:999px;
+      background:#7f5dff;
+      box-shadow:0 0 0 4px rgba(127,93,255,0.45);
+    }
+    .login-title {
+      font-size:18px;
+      margin-bottom:4px;
+    }
+    .login-subtitle {
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:10px;
+    }
+    .login-status {
+      margin-top:10px;
+      font-size:12px;
+      min-height:18px;
+    }
+    .login-status.success { color:#34d399; }
+    .login-status.error { color:#ff4b6a; }
+  </style>
+</head>
+<body>
+  <h1>Admin control panel</h1>
+  <div class="sub">Manage agents, upload leads, and track booked calls and payments.</div>
+
+  <div class="layout">
+    <!-- LEFT COLUMN: Create user + Upload leads -->
+    <div class="panel">
+      <!-- Create user -->
+      <section>
+        <div class="login-badge">
+          <span class="login-badge-dot"></span>
+          <span>Admin Portal</span>
+        </div>
+        <h2 style="margin-bottom:0;">Create call team user</h2>
+        <p class="login-subtitle">
+          Admin-only: create login credentials for call agents and team members.
+        </p>
+
+        <form id="createUserForm">
+          <div class="field">
+            <label for="agentName">Agent name</label>
+            <input id="agentName" type="text" class="login-input" required placeholder="e.g. Rahul" />
+          </div>
+
+          <div class="field">
+            <label for="sheetName">Sheet / team id</label>
+            <input id="sheetName" type="text" class="login-input" required placeholder="e.g. rahul_calls" />
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <input id="password" type="password" class="login-input" required minlength="4" />
+          </div>
+
+          <div class="mt-8">
+            <button type="submit" id="submitUserBtn" class="btn-primary w-100">
+              <span>Create user</span>
+            </button>
+          </div>
+
+          <div id="createUserMessage" class="login-status"></div>
+        </form>
+      </section>
+
+      <hr style="border:none;border-top:1px solid #1f2937;margin:14px 0;" />
+
+      <!-- Upload leads -->
+      <section>
+        <h2 style="margin-bottom:6px;">Upload leads</h2>
+        <div class="field">
+          <label for="uploadCurrentAdmin">Admin user</label>
+          <input id="uploadCurrentAdmin" type="text" disabled value="Admin" />
+        </div>
+
+        <div class="field">
+          <label for="uploadUserSelect">Agent (user)</label>
+          <select id="uploadUserSelect">
+            <option value="">Loading users...</option>
+          </select>
+          <span style="font-size:11px;color:var(--muted);">
+            Choose which agent these leads belong to. Data will link to that user only.
+          </span>
+        </div>
+
+        <div class="field">
+          <label for="fileInput">CSV / Excel file</label>
+          <input
+            id="fileInput"
+            type="file"
+            accept=".csv,.xlsx,.xls"
+          />
+          <span style="font-size:11px;color:var(--muted);">
+            Required columns: Business Name, Phone (number), Link (optional). Duplicate phone numbers for this user will be updated, not duplicated.
+          </span>
+        </div>
+
+        <button id="uploadBtn" class="btn-primary w-100" type="button" disabled>
+          Upload &amp; sync leads
+        </button>
+
+        <div id="statusText" class="status-text"></div>
+        <div id="previewBox" class="preview-box" style="display:none;"></div>
+      </section>
+    </div>
+
+    <!-- RIGHT COLUMN: Existing stats + booked calls dashboard -->
+    <div class="panel">
+      <h2>Overview</h2>
+      <div class="flex">
+        <div class="field">
+          <label for="agentSelect">Filter by agent</label>
+          <select id="agentSelect"></select>
+        </div>
+        <div class="tag" id="dateRangeTag">All time</div>
+        <button class="btn-outline" id="refreshStatsBtn">Refresh</button>
+      </div>
+
+      <div class="flex mt-8">
+        <div class="field">
+          <label>From date</label>
+          <input type="date" id="fromDate" />
+        </div>
+        <div class="field">
+          <label>To date</label>
+          <input type="date" id="toDate" />
+        </div>
+        <div class="field">
+          <label>&nbsp;</label>
+          <button class="btn-outline" id="applyDateFilterBtn">Apply</button>
+        </div>
+      </div>
+
+      <div class="mt-8">
+        <table>
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th class="text-right">Value</th>
+            </tr>
+          </thead>
+          <tbody id="statsTableBody">
+            <tr><td>Total calls done</td><td class="text-right">0</td></tr>
+            <tr><td>Booked calls</td><td class="text-right">0</td></tr>
+            <tr><td>Deals confirmed</td><td class="text-right">0</td></tr>
+            <tr><td>Customer paid (₹)</td><td class="text-right">0</td></tr>
+            <tr><td>Commission due (₹)</td><td class="text-right">0</td></tr>
+            <tr><td>Commission paid (₹)</td><td class="text-right">0</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-12">
+        <div class="pill-filter-group">
+          <span style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.15em;">Booked calls</span>
+          <button class="pill active" data-booked-filter="all">All</button>
+          <button class="pill" data-booked-filter="upcoming">Upcoming</button>
+          <button class="pill" data-booked-filter="completed">Completed</button>
+          <button class="pill" data-booked-filter="unpaid">Unpaid</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Agent</th>
+                <th>Business</th>
+                <th>Phone</th>
+                <th>Agreed?</th>
+                <th>Paid (₹)</th>
+                <th>Comm (₹)</th>
+                <th>Comm paid?</th>
+                <th>Save</th>
+              </tr>
+            </thead>
+            <tbody id="bookedCallsBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Supabase + SheetJS -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script>
+    const SUPABASE_URL = 'https://azhahzauienluwksfnpd.supabase.co';
+    const SUPABASE_ANON_KEY =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF6aGFoemF1aWVubHV3a3NmbnBkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5ODQyNTcsImV4cCI6MjA4MzU2MDI1N30.qDusd_t2to97drn6DjEeyvnO9_Jh3WyXt-LborK7dPw';
+
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Shared state
+    let agents = [];
+    let bookedCalls = [];
+    let currentAgentId = '';
+    let currentBookedFilter = 'all';
+
+    // Elements
+    const agentSelect = document.getElementById('agentSelect');
+    const dateRangeTag = document.getElementById('dateRangeTag');
+    const statsBody = document.getElementById('statsTableBody');
+    const bookedBody = document.getElementById('bookedCallsBody');
+
+    const uploadUserSelect = document.getElementById('uploadUserSelect');
+    const fileInputEl = document.getElementById('fileInput');
+    const uploadBtnEl = document.getElementById('uploadBtn');
+    const statusEl = document.getElementById('statusText');
+    const previewBoxEl = document.getElementById('previewBox');
+
+    let parsedRows = [];
+
+    // -------- Agents & stats --------
+    async function loadAgents() {
+      const sel = agentSelect;
+      sel.innerHTML = '<option value="">All agents</option>';
+      uploadUserSelect.innerHTML = '<option value="">Loading users...</option>';
+
+      const { data, error } = await sb
+        .from('users')
+        .select('id, agent_name, sheet_name')
+        .order('agent_name', { ascending:true });
+
+      if (error) {
+        console.error(error);
+        uploadUserSelect.innerHTML = '<option value="">Failed to load users</option>';
+        return;
+      }
+
+      agents = data || [];
+      sel.innerHTML = '<option value="">All agents</option>';
+      agents.forEach(a => {
+        const opt1 = document.createElement('option');
+        opt1.value = a.id;
+        opt1.textContent = a.agent_name + ' (' + a.sheet_name + ')';
+        sel.appendChild(opt1);
+
+        const opt2 = document.createElement('option');
+        opt2.value = a.id;
+        opt2.textContent = a.agent_name + ' (' + a.sheet_name + ')';
+        uploadUserSelect.appendChild(opt2);
+      });
+    }
+
+    function getDateFilter() {
+      const from = document.getElementById('fromDate').value || null;
+      const to = document.getElementById('toDate').value || null;
+      if (!from && !to) {
+        dateRangeTag.textContent = 'All time';
+      } else {
+        dateRangeTag.textContent = (from || '…') + ' → ' + (to || '…');
+      }
+      return { from, to };
+    }
+
+    async function loadStatsAndBooked() {
+      statsBody.innerHTML = '<tr><td colspan="2">Loading…</td></tr>';
+      const { from, to } = getDateFilter();
+      let q = sb
+        .from('agent_calls')
+        .select('*, users!inner(id,agent_name)', { count:'exact' })
+        .order('time_slot', { ascending:true });
+
+      if (currentAgentId) q = q.eq('user_id', currentAgentId);
+      if (from) q = q.gte('call_date', from);
+      if (to) q = q.lte('call_date', to);
+
+      const { data, error } = await q;
+      if (error) {
+        console.error(error);
+        statsBody.innerHTML = '<tr><td colspan="2">Error loading</td></tr>';
+        return;
+      }
+      const rows = data || [];
+
+      let totalCalls = 0;
+      let booked = 0;
+      let dealsConfirmed = 0;
+      let customerPaidTotal = 0;
+      let commissionDue = 0;
+      let commissionPaid = 0;
+
+      rows.forEach(r => {
+        const statusText = (r.call_status || '').toLowerCase().trim();
+        if (statusText && statusText !== 'pending') totalCalls += 1;
+        if (r.booked) booked += 1;
+
+        const agreed = !!r.customer_agreed || !!r.project_completed;
+        if (agreed) dealsConfirmed += 1;
+
+        const paidAmount = Number(r.customer_paid || 0);
+        const commission = Number(r.commission || 0);
+        const isPaidToAgent = !!r.paid;
+
+        if (paidAmount > 0) customerPaidTotal += paidAmount;
+        if (!isNaN(commission) && commission > 0) {
+          if (isPaidToAgent) commissionPaid += commission;
+          else commissionDue += commission;
+        }
+      });
+
+      statsBody.innerHTML = `
+        <tr><td>Total calls done</td><td class="text-right">${totalCalls}</td></tr>
+        <tr><td>Booked calls</td><td class="text-right">${booked}</td></tr>
+        <tr><td>Deals confirmed</td><td class="text-right">${dealsConfirmed}</td></tr>
+        <tr><td>Customer paid (₹)</td><td class="text-right">${customerPaidTotal}</td></tr>
+        <tr><td>Commission due (₹)</td><td class="text-right">${commissionDue}</td></tr>
+        <tr><td>Commission paid (₹)</td><td class="text-right">${commissionPaid}</td></tr>
+      `;
+
+      bookedCalls = rows.filter(r => r.booked && r.time_slot);
+      renderBookedCallsTable();
+    }
+
+    function renderBookedCallsTable() {
+      bookedBody.innerHTML = '';
+      const now = new Date();
+      const filtered = bookedCalls.filter(row => {
+        const ts = row.time_slot ? new Date(row.time_slot) : null;
+        const paidAmount = Number(row.customer_paid || 0);
+        const isCompleted = !!row.customer_agreed || !!row.project_completed;
+        if (!ts) return false;
+        if (currentBookedFilter === 'upcoming') return ts >= now;
+        if (currentBookedFilter === 'completed') return isCompleted;
+        if (currentBookedFilter === 'unpaid') return isCompleted && paidAmount <= 0;
+        return true;
+      });
+
+      if (!filtered.length) {
+        bookedBody.innerHTML = '<tr><td colspan="9">No booked calls.</td></tr>';
+        return;
+      }
+
+      filtered.forEach(row => {
+        const tr = document.createElement('tr');
+        const d = new Date(row.time_slot);
+        const dateStr = d.toISOString().slice(0,10);
+        const timeStr = d.toISOString().slice(11,16);
+        const agentName = (row.users && row.users.agent_name) || '-';
+
+        const agreed = !!row.customer_agreed || !!row.project_completed;
+        const paidAmount = Number(row.customer_paid || 0);
+        const commission = Number(row.commission || 0);
+        const isPaidToAgent = !!row.paid;
+
+        tr.innerHTML = `
+          <td>${dateStr} ${timeStr}</td>
+          <td>${agentName}</td>
+          <td>${row.business_name || '-'}</td>
+          <td>${row.business_number || '-'}</td>
+          <td>
+            <select class="input-inline" data-field="agreed">
+              <option value="">Pending</option>
+              <option value="yes" ${agreed ? 'selected' : ''}>Yes</option>
+              <option value="no" ${!agreed && row.customer_agreed === false ? 'selected' : ''}>No</option>
+            </select>
+          </td>
+          <td><input type="number" min="0" class="input-inline" data-field="customer_paid" value="${paidAmount || ''}" /></td>
+          <td><input type="number" min="0" class="input-inline" data-field="commission" value="${commission || ''}" /></td>
+          <td>
+            <select class="input-inline" data-field="paid">
+              <option value="no" ${!isPaidToAgent ? 'selected' : ''}>No</option>
+              <option value="yes" ${isPaidToAgent ? 'selected' : ''}>Yes</option>
+            </select>
+          </td>
+          <td><button class="btn-outline" data-role="save-row">Save</button></td>
+        `;
+        tr.querySelector('[data-role="save-row"]').addEventListener('click', () => {
+          saveBookedRow(row.id, tr);
+        });
+        bookedBody.appendChild(tr);
+      });
+    }
+
+    async function saveBookedRow(callId, rowEl) {
+      const agreedSel = rowEl.querySelector('[data-field="agreed"]');
+      const paidInput = rowEl.querySelector('[data-field="customer_paid"]');
+      const commInput = rowEl.querySelector('[data-field="commission"]');
+      const paidSel   = rowEl.querySelector('[data-field="paid"]');
+      const btn       = rowEl.querySelector('[data-role="save-row"]');
+
+      const agreedVal = agreedSel.value;
+      const customerPaid = Number(paidInput.value || 0);
+      const commission = Number(commInput.value || 0);
+      const paidToAgent = paidSel.value === 'yes';
+
+      const updates = {
+        customer_paid: isNaN(customerPaid) ? 0 : customerPaid,
+        commission: isNaN(commission) ? 0 : commission,
+        paid: paidToAgent
+      };
+
+      if (agreedVal === 'yes') {
+        updates.customer_agreed = true;
+        updates.project_completed = true;
+      } else if (agreedVal === 'no') {
+        updates.customer_agreed = false;
+        updates.project_completed = false;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+
+      const { error } = await sb
+        .from('agent_calls')
+        .update(updates)
+        .eq('id', callId);
+
+      if (error) {
+        console.error(error);
+        alert('Error saving row');
+        btn.disabled = false;
+        btn.textContent = 'Save';
+        return;
+      }
+      btn.textContent = 'Saved';
+      await loadStatsAndBooked();
+    }
+
+    // -------- Create user (from create-user page) --------
+    const createUserForm = document.getElementById('createUserForm');
+    const createUserMsg = document.getElementById('createUserMessage');
+    const submitUserBtn = document.getElementById('submitUserBtn');
+
+    createUserForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      createUserMsg.textContent = '';
+      createUserMsg.className = 'login-status';
+      submitUserBtn.disabled = true;
+      submitUserBtn.textContent = 'Creating...';
+
+      const agentName = document.getElementById('agentName').value.trim();
+      const sheetName = document.getElementById('sheetName').value.trim();
+      const password = document.getElementById('password').value;
+
+      if (!agentName || !sheetName || !password) {
+        createUserMsg.textContent = 'Please fill all fields.';
+        createUserMsg.className = 'login-status error';
+        submitUserBtn.disabled = false;
+        submitUserBtn.textContent = 'Create user';
+        return;
+      }
+
+      try {
+        const username = `${agentName.toLowerCase().replace(/\s+/g, '')}_${sheetName}`;
+        const { data, error } = await sb
+          .from('users')
+          .insert([{ password, agent_name: agentName, sheet_name: sheetName }])
+          .select()
+          .single();
+
+        if (error) {
+          console.error(error);
+          createUserMsg.textContent = error.message || 'Error saving user record';
+          createUserMsg.className = 'login-status error';
+        } else {
+          createUserMsg.textContent = 'User created successfully!';
+          createUserMsg.className = 'login-status success';
+          createUserForm.reset();
+          await loadAgents();
+          setTimeout(() => {
+            alert(`✅ User Created!\n\n👤 Agent: ${agentName}\n📊 Sheet: ${sheetName}\n🔐 Username: ${username}\n🔑 Password: ${password}\n\n💡 Save these credentials securely!`);
+          }, 500);
+        }
+      } catch (err) {
+        console.error(err);
+        createUserMsg.textContent = 'Unexpected error creating user';
+        createUserMsg.className = 'login-status error';
+      } finally {
+        submitUserBtn.disabled = false;
+        submitUserBtn.textContent = 'Create user';
+      }
+    });
+
+    // -------- Upload leads (from upload-leads page) --------
+    function updateUploadButtonState() {
+      const selectedUser = uploadUserSelect.value;
+      const hasFile = !!fileInputEl.files[0];
+      uploadBtnEl.disabled = !(selectedUser && hasFile && parsedRows.length > 0);
+    }
+
+    function parseCSV(text) {
+      const lines = text.split(/\r?\n/).filter(l => l.trim() !== '');
+      if (!lines.length) return [];
+      const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+      const rows = lines.slice(1).map(line => {
+        const cols = line.split(',');
+        const row = {};
+        headers.forEach((h, idx) => { row[h] = (cols[idx] || '').trim(); });
+        return row;
+      });
+      return rows;
+    }
+
+    function normalizeParsedRows(rawRows) {
+      return rawRows
+        .map(r => {
+          const name = r['business name'] || r['name'] || r['business'] || '';
+          const phone = r['phone'] || r['mobile'] || r['b number'] || r['number'] || r['business number'] || '';
+          const link = r['link'] || r['links'] || r['location'] || '';
+          return {
+            business_name: String(name || '').trim(),
+            business_number: String(phone || '').trim(),
+            links: String(link || '').trim()
+          };
+        })
+        .filter(r => r.business_number !== '' || r.business_name !== '' || r.links !== '');
+    }
+
+    function showPreview(rows) {
+      if (!rows.length) {
+        previewBoxEl.style.display = 'none';
+        previewBoxEl.textContent = '';
+        return;
+      }
+      previewBoxEl.style.display = 'block';
+      const firstFew = rows.slice(0, 5);
+      const lines = firstFew.map(r => `${r.business_name || '(no name)'} | ${r.business_number || '(no number)'} | ${r.links || '(no link)'}`);
+      const more = rows.length > 5 ? `\n... +${rows.length - 5} more` : '';
+      previewBoxEl.textContent = lines.join('\n') + more;
+    }
+
+    function handleFileChange() {
+      parsedRows = [];
+      statusEl.textContent = '';
+      statusEl.className = 'status-text';
+      previewBoxEl.style.display = 'none';
+      previewBoxEl.textContent = '';
+
+      const file = fileInputEl.files[0];
+      if (!file) {
+        updateUploadButtonState();
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const data = e.target.result;
+          let rawRows = [];
+          if (file.name.toLowerCase().endsWith('.csv')) {
+            rawRows = parseCSV(data);
+          } else {
+            const workbook = XLSX.read(data, { type: 'binary' });
+            const sheetName = workbook.SheetNames[0];
+            const sheet = workbook.Sheets[sheetName];
+            rawRows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
+          }
+          const normalized = normalizeParsedRows(rawRows);
+          if (!normalized.length) {
+            statusEl.textContent = 'No usable rows found in file.';
+            statusEl.className = 'status-text error';
+          } else {
+            parsedRows = normalized;
+            statusEl.textContent = `Parsed ${parsedRows.length} rows.`;
+            statusEl.className = 'status-text ok';
+            showPreview(parsedRows);
+          }
+        } catch (err) {
+          console.error('Parse error', err);
+          statusEl.textContent = 'Failed to read file.';
+          statusEl.className = 'status-text error';
+        } finally {
+          updateUploadButtonState();
+        }
+      };
+      if (file.name.toLowerCase().endsWith('.csv')) {
+        reader.readAsText(file);
+      } else {
+        reader.readAsBinaryString(file);
+      }
+    }
+
+    async function uploadLeads() {
+      const userId = uploadUserSelect.value;
+      if (!userId) {
+        statusEl.textContent = 'Select a user first.';
+        statusEl.className = 'status-text error';
+        return;
+      }
+      if (!parsedRows.length) {
+        statusEl.textContent = 'No parsed rows to upload.';
+        statusEl.className = 'status-text error';
+        return;
+      }
+
+      uploadBtnEl.disabled = true;
+      uploadBtnEl.textContent = 'Uploading...';
+      statusEl.textContent = '';
+      statusEl.className = 'status-text';
+
+      try {
+        const { data: existing, error: existingErr } = await sb
+          .from('agent_calls')
+          .select('id, business_number')
+          .eq('user_id', userId);
+
+        if (existingErr) {
+          console.error('Error loading existing calls', existingErr);
+          statusEl.textContent = 'Failed to fetch existing calls.';
+          statusEl.className = 'status-text error';
+          return;
+        }
+
+        const existingMap = {};
+        (existing || []).forEach(r => {
+          const key = String(r.business_number || '').trim();
+          if (key) existingMap[key] = r.id;
+        });
+
+        const inserts = [];
+        const updates = [];
+        const todayIsoDate = new Date().toISOString().slice(0, 10);
+
+        parsedRows.forEach(row => {
+          const phone = String(row.business_number || '').trim();
+          if (!phone) return;
+          const safeName = (row.business_name && row.business_name.trim() !== '') ? row.business_name.trim() : 'Unnamed';
+
+          const base = {
+            user_id: userId,
+            business_name: safeName,
+            business_number: phone,
+            links: row.links || null,
+            call_status: 'pending',
+            call_again: false,
+            booked: false,
+            call_date: todayIsoDate
+          };
+
+          if (existingMap[phone]) {
+            updates.push({ id: existingMap[phone], ...base });
+          } else {
+            inserts.push(base);
+          }
+        });
+
+        if (!inserts.length && !updates.length) {
+          statusEl.textContent = 'Nothing new to sync (all numbers already exist).';
+          statusEl.className = 'status-text ok';
+          return;
+        }
+
+        if (inserts.length) {
+          const { error: insertErr } = await sb
+            .from('agent_calls')
+            .insert(inserts);
+          if (insertErr) {
+            console.error('Insert error', insertErr);
+            statusEl.textContent = 'Error inserting new rows.';
+            statusEl.className = 'status-text error';
+            return;
+          }
+        }
+
+        if (updates.length) {
+          for (const row of updates) {
+            const { id, ...rest } = row;
+            const { error: updateErr } = await sb
+              .from('agent_calls')
+              .update(rest)
+              .eq('id', id)
+              .eq('user_id', userId);
+            if (updateErr) {
+              console.error('Update error', updateErr);
+              statusEl.textContent = 'Error updating some existing rows.';
+              statusEl.className = 'status-text error';
+              return;
+            }
+          }
+        }
+
+        statusEl.textContent = `Upload complete. Inserted ${inserts.length}, updated ${updates.length}.`;
+        statusEl.className = 'status-text ok';
+        await loadStatsAndBooked();
+      } catch (err) {
+        console.error(err);
+        statusEl.textContent = 'Unexpected error during upload.';
+        statusEl.className = 'status-text error';
+      } finally {
+        uploadBtnEl.disabled = false;
+        uploadBtnEl.textContent = 'Upload & sync leads';
+      }
+    }
+
+    // Init
+    document.addEventListener('DOMContentLoaded', async () => {
+
+        const adminLogoutBtn = document.getElementById('adminLogoutBtn');
+if (adminLogoutBtn) {
+  adminLogoutBtn.addEventListener('click', () => {
+    // Clear any stored session flags
+    sessionStorage.removeItem('is_admin');
+    sessionStorage.removeItem('username'); // optional, if you reuse same storage
+
+    // Redirect to login page
+    window.location.href = 'user-login.html';
+  });
+}
+
+      await loadAgents();
+      await loadStatsAndBooked();
+
+      agentSelect.addEventListener('change', async (e) => {
+        currentAgentId = e.target.value || '';
+        await loadStatsAndBooked();
+      });
+      document.getElementById('refreshStatsBtn').addEventListener('click', loadStatsAndBooked);
+      document.getElementById('applyDateFilterBtn').addEventListener('click', loadStatsAndBooked);
+
+      document.querySelectorAll('[data-booked-filter]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('[data-booked-filter]').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentBookedFilter = btn.dataset.bookedFilter;
+          renderBookedCallsTable();
+        });
+      });
+
+      fileInputEl.addEventListener('change', handleFileChange);
+      uploadUserSelect.addEventListener('change', updateUploadButtonState);
+      uploadBtnEl.addEventListener('click', uploadLeads);
+    });
+  </script>
+</body>
+</html>
