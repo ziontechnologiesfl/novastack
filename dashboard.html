@@ -716,7 +716,7 @@
             <div class="mini-sub">Paid customers</div>
           </div>
           <div class="mini-card">
-            <div class="mini-label">My clients</div>
+            <div class="mini-label">Booked calls</div>
             <div class="mini-value" id="myClientsMini">0</div>
             <div class="mini-sub">Total clients</div>
           </div>
@@ -867,10 +867,11 @@
         confirmedProjects += 1;
       }
 
-      const customerPaidAmount = Number(row.customer_paid || 0);
-      if (customerPaidAmount > 0) {
-        myClients += 1;
-      }
+     const customerPaidAmount = Number(row.customer_paid || 0);
+if (customerPaidAmount > 0 && row.project_completed === true) {
+  myClients += 1;
+}
+
 
       if (!isNaN(commission) && commission > 0) {
         if (!isPaid && customerPaidAmount > 0) {
@@ -1308,12 +1309,14 @@
       return;
     }
 
-    const { data, error } = await sbClient
-      .from('agent_calls')
-      .select('*')
-      .eq('user_id', currentUserId)
-      .gt('customer_paid', 0)
-      .order('call_date', { ascending: true });
+const { data, error } = await sbClient
+  .from('agent_calls')
+  .select('*')
+  .eq('user_id', currentUserId)
+  .gt('customer_paid', 0)
+  .eq('project_completed', true)
+  .order('call_date', { ascending: true });
+
 
     if (error) {
       console.error(error);
@@ -1345,34 +1348,44 @@
       const phoneNumber = lead.business_number || '';
       const phoneText = phoneNumber ? phoneNumber : 'No number';
       const linkHref = lead.links || '#';
-      const customerPaidAmount = Number(lead.customer_paid || 0);
-      const statusClass = computeStatusClass(lead) || 'status-red';
+const customerPaidAmount = Number(lead.customer_paid || 0);
+const statusClass = computeStatusClass(lead) || 'status-red';
+const clientConfirmed = lead.project_completed === true;
 
-      card.innerHTML = `
-        <div class="lead-header">
-          <div class="lead-business-row">
-            <div class="lead-business">
-              ${businessName}
-              <span class="status-indicator ${statusClass}"></span>
-            </div>
-            <a href="${linkHref}" target="_blank" class="lead-link">
-              ${lead.links ? 'Open link' : 'No link'}
-            </a>
-          </div>
+card.innerHTML = `
+  <div class="lead-header">
+    <div class="lead-business-row">
+      <div class="lead-business">
+        ${businessName}
+        <span class="status-indicator ${statusClass}"></span>
+      </div>
+      <a href="${linkHref}" target="_blank" class="lead-link">
+        ${lead.links ? 'Open link' : 'No link'}
+      </a>
+    </div>
 
-          <div class="lead-phone-row">
-            <div class="lead-phone-text">${phoneText}</div>
-            <div class="lead-field-date-tag">
-              Paid: ₹${customerPaidAmount}
-            </div>
-          </div>
-        </div>
+    <div class="lead-phone-row">
+      <div class="lead-phone-text">${phoneText}</div>
+      <div class="lead-field-date-tag">
+        Paid: ₹${customerPaidAmount}
+      </div>
+    </div>
 
-        <div class="lead-field-block">
-          <div class="lead-field-label">Notes</div>
-          <div class="notes-textarea" style="min-height:40px;">${lead.notes || 'No notes'}</div>
-        </div>
-      `;
+    ${
+      clientConfirmed
+        ? `<div style="margin-top:6px;font-size:12px;color:#4ade80;font-weight:500;">
+             Client confirmed
+           </div>`
+        : ''
+    }
+  </div>
+
+  <div class="lead-field-block">
+    <div class="lead-field-label">Notes</div>
+    <div class="notes-textarea" style="min-height:40px;">${lead.notes || 'No notes'}</div>
+  </div>
+`;
+
       strip.appendChild(card);
     });
 
