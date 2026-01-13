@@ -3,9 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <title>NovaStack – Admin Dashboard</title>
-  <button id="adminLogoutBtn" class="btn-outline" type="button">
-  Logout
-</button>
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
@@ -33,7 +30,7 @@
       min-height:100vh;
       padding:16px 20px;
     }
-    h1 { font-size:22px; margin-bottom:4px; }
+    h1 { font-size:22px; margin-bottom:4px; display:flex; align-items:center; justify-content:space-between; }
     .sub { font-size:12px; color:var(--muted); margin-bottom:16px; }
 
     .layout {
@@ -180,7 +177,7 @@
       border-radius:6px;
       border:1px solid #4b5563;
       background:#020617;
-      color:var(--text);
+      color:#e5e7eb;
       padding:3px 5px;
       font-size:11px;
     }
@@ -202,7 +199,7 @@
       overflow:auto;
     }
 
-    /* Create user card styling (reused from your page) */
+    /* Create user card styling */
     .login-badge {
       display:inline-flex;
       align-items:center;
@@ -240,10 +237,20 @@
     }
     .login-status.success { color:#34d399; }
     .login-status.error { color:#ff4b6a; }
+
+    .notes-cell {
+      max-width:180px;
+      white-space:normal;
+      font-size:11px;
+      color:var(--muted);
+    }
   </style>
 </head>
 <body>
-  <h1>Admin control panel</h1>
+  <h1>
+    <span>Admin control panel</span>
+    <button id="adminLogoutBtn" class="btn-outline" type="button">Logout</button>
+  </h1>
   <div class="sub">Manage agents, upload leads, and track booked calls and payments.</div>
 
   <div class="layout">
@@ -389,6 +396,7 @@
                 <th>Agent</th>
                 <th>Business</th>
                 <th>Phone</th>
+                <th>Notes</th>
                 <th>Agreed?</th>
                 <th>Paid (₹)</th>
                 <th>Comm (₹)</th>
@@ -450,7 +458,7 @@
         return;
       }
 
-      agents = data || [];
+      agents = (data || []);
       sel.innerHTML = '<option value="">All agents</option>';
       agents.forEach(a => {
         const opt1 = document.createElement('option');
@@ -508,7 +516,7 @@
         if (statusText && statusText !== 'pending') totalCalls += 1;
         if (r.booked) booked += 1;
 
-        const agreed = !!r.customer_agreed || !!r.project_completed;
+        const agreed = !!r.project_completed;
         if (agreed) dealsConfirmed += 1;
 
         const paidAmount = Number(r.customer_paid || 0);
@@ -541,7 +549,7 @@
       const filtered = bookedCalls.filter(row => {
         const ts = row.time_slot ? new Date(row.time_slot) : null;
         const paidAmount = Number(row.customer_paid || 0);
-        const isCompleted = !!row.customer_agreed || !!row.project_completed;
+        const isCompleted = !!row.project_completed;
         if (!ts) return false;
         if (currentBookedFilter === 'upcoming') return ts >= now;
         if (currentBookedFilter === 'completed') return isCompleted;
@@ -550,7 +558,7 @@
       });
 
       if (!filtered.length) {
-        bookedBody.innerHTML = '<tr><td colspan="9">No booked calls.</td></tr>';
+        bookedBody.innerHTML = '<tr><td colspan="10">No booked calls.</td></tr>';
         return;
       }
 
@@ -561,21 +569,25 @@
         const timeStr = d.toISOString().slice(11,16);
         const agentName = (row.users && row.users.agent_name) || '-';
 
-        const agreed = !!row.customer_agreed || !!row.project_completed;
+        const agreed = !!row.project_completed;
         const paidAmount = Number(row.customer_paid || 0);
         const commission = Number(row.commission || 0);
         const isPaidToAgent = !!row.paid;
+        const notes = row.notes || '';
 
         tr.innerHTML = `
           <td>${dateStr} ${timeStr}</td>
           <td>${agentName}</td>
           <td>${row.business_name || '-'}</td>
           <td>${row.business_number || '-'}</td>
+          <td class="notes-cell">
+            ${notes ? notes.replace(/\n/g, ' ') : '<span style="color:#6b7280;">No notes</span>'}
+          </td>
           <td>
             <select class="input-inline" data-field="agreed">
               <option value="">Pending</option>
               <option value="yes" ${agreed ? 'selected' : ''}>Yes</option>
-              <option value="no" ${!agreed && row.customer_agreed === false ? 'selected' : ''}>No</option>
+              <option value="no" ${row.project_completed === false ? 'selected' : ''}>No</option>
             </select>
           </td>
           <td><input type="number" min="0" class="input-inline" data-field="customer_paid" value="${paidAmount || ''}" /></td>
@@ -602,24 +614,24 @@
       const paidSel   = rowEl.querySelector('[data-field="paid"]');
       const btn       = rowEl.querySelector('[data-role="save-row"]');
 
-      const agreedVal = agreedSel.value;
-      const customerPaid = Number(paidInput.value || 0);
-      const commission = Number(commInput.value || 0);
-      const paidToAgent = paidSel.value === 'yes';
+      const agreedVal = agreedSel ? agreedSel.value : '';
+      const customerPaid = Number(paidInput && paidInput.value ? paidInput.value : 0);
+      const commission = Number(commInput && commInput.value ? commInput.value : 0);
+      const paidToAgent = paidSel && paidSel.value === 'yes';
 
       const updates = {
         customer_paid: isNaN(customerPaid) ? 0 : customerPaid,
         commission: isNaN(commission) ? 0 : commission,
-        paid: paidToAgent
+        paid: !!paidToAgent
       };
 
+      // project_completed is the boolean "agreed?" column
       if (agreedVal === 'yes') {
-        updates.customer_agreed = true;
         updates.project_completed = true;
       } else if (agreedVal === 'no') {
-        updates.customer_agreed = false;
         updates.project_completed = false;
       }
+      // if agreedVal === '' (Pending), do not change project_completed
 
       btn.disabled = true;
       btn.textContent = 'Saving...';
@@ -640,7 +652,7 @@
       await loadStatsAndBooked();
     }
 
-    // -------- Create user (from create-user page) --------
+    // -------- Create user --------
     const createUserForm = document.getElementById('createUserForm');
     const createUserMsg = document.getElementById('createUserMessage');
     const submitUserBtn = document.getElementById('submitUserBtn');
@@ -695,7 +707,7 @@
       }
     });
 
-    // -------- Upload leads (from upload-leads page) --------
+    // -------- Upload leads --------
     function updateUploadButtonState() {
       const selectedUser = uploadUserSelect.value;
       const hasFile = !!fileInputEl.files[0];
@@ -908,18 +920,14 @@
 
     // Init
     document.addEventListener('DOMContentLoaded', async () => {
-
-        const adminLogoutBtn = document.getElementById('adminLogoutBtn');
-if (adminLogoutBtn) {
-  adminLogoutBtn.addEventListener('click', () => {
-    // Clear any stored session flags
-    sessionStorage.removeItem('is_admin');
-    sessionStorage.removeItem('username'); // optional, if you reuse same storage
-
-    // Redirect to login page
-    window.location.href = 'user-login.html';
-  });
-}
+      const adminLogoutBtn = document.getElementById('adminLogoutBtn');
+      if (adminLogoutBtn) {
+        adminLogoutBtn.addEventListener('click', () => {
+          sessionStorage.removeItem('is_admin');
+          sessionStorage.removeItem('username');
+          window.location.href = 'user-login.html';
+        });
+      }
 
       await loadAgents();
       await loadStatsAndBooked();
