@@ -648,6 +648,128 @@
       min-height: 60px;
       resize: vertical;
     }
+
+    /* Add Customer collapsed styles */
+    .add-customer-wrapper {
+      margin-bottom: 8px;
+    }
+
+    .add-customer-toggle-btn {
+      width: 100%;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 500;
+      background: rgba(15, 23, 42, 0.95);
+      color: #e5e7eb;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .add-customer-toggle-btn span.label {
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 11px;
+      color: #9ca3c7;
+    }
+
+    .add-customer-toggle-btn span.icon {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    .add-customer-card {
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.16), transparent 55%),
+        linear-gradient(145deg, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.96));
+      border: 1px solid rgba(30, 64, 175, 0.8);
+      padding: 12px 12px 10px;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.9);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .add-customer-card.collapsed {
+      display: none;
+    }
+
+    .add-customer-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .add-customer-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .add-customer-input {
+      width: 100%;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      background: rgba(15, 23, 42, 0.92);
+      color: #e5e7eb;
+      padding: 8px 12px;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .add-customer-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .add-customer-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.5);
+    }
+
+    .add-customer-btn {
+      margin-top: 6px;
+      width: 100%;
+      border-radius: 999px;
+      border: none;
+      padding: 8px 0;
+      font-size: 13px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #38bdf8, #2563eb);
+      color: #020617;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.9);
+    }
+
+    .add-customer-btn:disabled {
+      opacity: 0.5;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .add-customer-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .add-customer-error {
+      margin-top: 4px;
+      font-size: 11px;
+      color: #fecaca;
+    }
+
+    .add-customer-success {
+      margin-top: 4px;
+      font-size: 11px;
+      color: #bbf7d0;
+    }
   </style>
 </head>
 <body>
@@ -731,6 +853,54 @@
 
     <!-- CALL SHEET TAB -->
     <main class="main" id="callSheetTab" style="display:none;">
+      <!-- Collapsed Add Customer section -->
+      <section class="add-customer-wrapper">
+        <button
+          type="button"
+          id="toggleAddCustomer"
+          class="add-customer-toggle-btn"
+        >
+          <span class="label">Add customer</span>
+          <span class="icon" id="toggleAddCustomerIcon">＋</span>
+        </button>
+
+        <div id="addCustomerCard" class="add-customer-card collapsed">
+          <div class="add-customer-title">New customer details</div>
+          <div class="add-customer-row">
+            <input
+              type="text"
+              id="addBusinessName"
+              class="add-customer-input"
+              placeholder="Business name"
+            />
+            <input
+              type="tel"
+              id="addBusinessNumber"
+              class="add-customer-input"
+              placeholder="Mobile number"
+            />
+            <input
+              type="url"
+              id="addBusinessLink"
+              class="add-customer-input"
+              placeholder="Google Maps link"
+            />
+          </div>
+          <button
+            id="addCustomerBtn"
+            type="button"
+            class="add-customer-btn"
+          >
+            Add to call sheet
+          </button>
+          <div id="addCustomerHint" class="add-customer-hint">
+            Fill in the details and add to your call sheet.
+          </div>
+          <div id="addCustomerError" class="add-customer-error" style="display:none;"></div>
+          <div id="addCustomerSuccess" class="add-customer-success" style="display:none;"></div>
+        </div>
+      </section>
+
       <div class="call-sheet-header">
         <div class="section-label">Call sheet</div>
         <input
@@ -789,692 +959,644 @@
     </nav>
   </div>
 
- <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script>
-  const SUPABASE_URL = 'https://azhahzauienluwksfnpd.supabase.co';
-  const SUPABASE_ANON_KEY =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF6aGFoemF1aWVubHV3a3NmbnBkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5ODQyNTcsImV4cCI6MjA4MzU2MDI1N30.qDusd_t2to97drn6DjEeyvnO9_Jh3WyXt-LborK7dPw';
-
-  const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  const SLOT_DURATION_MIN = 40;
-
-  let currentUser = null;
-  let currentUserId = null;
-
-  async function loadCurrentUser() {
-    const usernameKey = sessionStorage.getItem('username') || '';
-    if (!usernameKey) {
-      document.getElementById('userNameDisplay').textContent = 'Agent';
-      return;
-    }
-
-    const { data, error } = await sbClient
-      .from('users')
-      .select('*')
-      .eq('sheet_name', usernameKey)
-      .single();
-
-    if (error || !data) {
-      console.error('Error loading current user', error);
-      document.getElementById('userNameDisplay').textContent = usernameKey;
-      return;
-    }
-
-    currentUser = data;
-    currentUserId = data.id;
-    document.getElementById('userNameDisplay').textContent = data.agent_name;
-  }
-
-  async function loadDashboard() {
-    if (!currentUserId) return;
-
-    const { data: calls, error } = await sbClient
-      .from('agent_calls')
-      .select('*')
-      .eq('user_id', currentUserId);
-
-    if (error) {
-      console.error('Error loading dashboard', error);
-      return;
-    }
-
-    const todayStr = new Date().toISOString().slice(0, 10);
-
-    let totalEarnings = 0;
-    let pendingEarnings = 0;
-    let totalCalls = 0;
-    let todayCalls = 0;
-    let confirmedProjects = 0;
-    let myClients = 0;
-
-    calls.forEach(row => {
-      const isPaid = !!row.paid;
-      const commission = Number(row.commission || 0);
-      const isCompleted = !!row.project_completed;
-      const callDate = row.call_date ? String(row.call_date).slice(0, 10) : null;
-
-      const statusText = (row.call_status || '').toLowerCase().trim();
-      const isCallDone = statusText && statusText !== 'pending';
-
-      if (isCallDone) {
-        totalCalls += 1;
-        if (callDate === todayStr) {
-          todayCalls += 1;
-        }
-      }
-
-      if (isCompleted) {
-        confirmedProjects += 1;
-      }
-
-     const customerPaidAmount = Number(row.customer_paid || 0);
-if (customerPaidAmount > 0 && row.project_completed === true) {
-  myClients += 1;
-}
-
-
-      if (!isNaN(commission) && commission > 0) {
-        if (!isPaid && customerPaidAmount > 0) {
-          pendingEarnings += commission;
-        }
-        if (isPaid) {
-          totalEarnings += commission;
-        }
-      }
-    });
-
-    document.getElementById('totalEarnings').textContent = '₹' + totalEarnings;
-    document.getElementById('pendingEarnings').textContent = '₹' + pendingEarnings;
-    document.getElementById('totalCalls').textContent = totalCalls;
-    document.getElementById('todayCalls').textContent = todayCalls;
-    document.getElementById('confirmedProjects').textContent = confirmedProjects;
-    document.getElementById('myClients').textContent = myClients;
-    document.getElementById('myClientsMini').textContent = myClients;
-  }
-
-  let callRows = [];
-  let filteredCallRows = [];
-  let clientRows = [];
-  let filteredClientRows = [];
-  let currentFilter = 'all';
-  let currentSortMode = 'default';
-
-  function isSlotAvailableForUser(candidateIso, currentLeadId) {
-    if (!candidateIso) return true;
-    const start = new Date(candidateIso).getTime();
-    const end = start + SLOT_DURATION_MIN * 60 * 1000;
-
-    for (const row of callRows) {
-      if (!row.time_slot) continue;
-      if (row.id === currentLeadId) continue;
-
-      const rStart = new Date(row.time_slot).getTime();
-      const rEnd = rStart + SLOT_DURATION_MIN * 60 * 1000;
-
-      if (start < rEnd && end > rStart) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  function computeStatusClass(lead) {
-    const booked = !!lead.booked;
-    const customerPaid = Number(lead.customer_paid || 0);
-    if (!booked) return 'status-red';
-    if (booked && customerPaid <= 0) return 'status-yellow';
-    if (customerPaid > 0) return 'status-green';
-    return 'status-red';
-  }
-
-  function normalizeYesNo(val) {
-    if (val === true) return 'yes';
-    if (val === false) return 'no';
-    if (val == null) return '';
-    const s = String(val).toLowerCase().trim();
-    if (s === 'yes') return 'yes';
-    if (s === 'no') return 'no';
-    return '';
-  }
-
-  function getCallCategory(lead) {
-    const callStatus = normalizeYesNo(lead.call_status);
-    const callAgain = normalizeYesNo(lead.call_again);
-    const booked = !!lead.booked;
-
-    if (callStatus === 'yes' && callAgain === 'no' && !booked) return 'rejected';
-    if (callStatus === 'yes' && callAgain === 'yes' && booked) return 'confirmed';
-    if (callStatus === 'yes' && callAgain === 'yes' && !booked) return 'call_again';
-    return 'other';
-  }
-
-  function getSortWeight(lead) {
-    const callStatus = normalizeYesNo(lead.call_status);
-    const customerPaid = Number(lead.customer_paid || 0);
-    const completed = !!lead.project_completed || customerPaid > 0;
-
-    if (!callStatus) return 0;
-    if (callStatus === 'no') return 1;
-    if (!completed) return 2;
-    return 3;
-  }
-
-  function applyFilterAndSort() {
-    let rows = (callRows || []).filter(r => {
-      const name = (r.business_name || '').trim();
-      const num = (r.business_number || '').toString().trim();
-      const link = (r.links || '').trim();
-      return name || num || link;
-    });
-
-    if (currentFilter !== 'all') {
-      rows = rows.filter(r => getCallCategory(r) === currentFilter);
-    }
-
-    if (currentSortMode === 'default') {
-      rows.sort((a, b) => {
-        const wa = getSortWeight(a);
-        const wb = getSortWeight(b);
-        if (wa !== wb) return wa - wb;
-        const da = a.call_date ? new Date(a.call_date).getTime() : 0;
-        const db = b.call_date ? new Date(b.call_date).getTime() : 0;
-        return da - db;
-      });
-    }
-
-    filteredCallRows = rows;
-  }
-
-  async function loadCallSheet() {
-    const container = document.getElementById('callSheetContainer');
-    container.innerHTML = '<div class="placeholder-box">Loading call sheet...</div>';
-
-    if (!currentUserId) {
-      container.innerHTML = '<div class="placeholder-box">User not loaded.</div>';
-      return;
-    }
-
-    const { data, error } = await sbClient
-      .from('agent_calls')
-      .select('*')
-      .eq('user_id', currentUserId)
-      .order('call_date', { ascending: true });
-
-    if (error) {
-      console.error(error);
-      container.innerHTML = '<div class="placeholder-box">Error loading call sheet.</div>';
-      return;
-    }
-
-    callRows = data || [];
-
-    applyFilterAndSort();
-
-    if (!filteredCallRows.length) {
-      container.innerHTML = '<div class="placeholder-box">No leads in call sheet.</div>';
-      return;
-    }
-
-    renderCallSheetStrip();
-  }
-
-  function renderCallSheetStrip() {
-    const container = document.getElementById('callSheetContainer');
-    if (!filteredCallRows.length) {
-      container.innerHTML = '<div class="placeholder-box">No matching leads.</div>';
-      return;
-    }
-
-    const strip = document.createElement('div');
-    strip.className = 'call-sheet-strip';
-
-    filteredCallRows.forEach((lead, index) => {
-      const card = createLeadCard(lead, index);
-      strip.appendChild(card);
-    });
-
-    container.innerHTML = '';
-    container.appendChild(strip);
-  }
-
-  function createLeadCard(lead, index) {
-    const card = document.createElement('div');
-    card.className = 'lead-card';
-    card.dataset.index = index;
-    card.dataset.dirty = 'false';
-
-    const businessName = lead.business_name || 'No name';
-    const phoneNumber = lead.business_number || '';
-    const phoneText = phoneNumber ? phoneNumber : 'No number';
-    const phoneHref = phoneNumber ? `tel:${phoneNumber}` : '#';
-    const linkHref = lead.links || '#';
-
-    let timeSlotValue = '';
-    let dateTagText = '';
-
-    if (lead.time_slot) {
-      const d = new Date(lead.time_slot);
-      timeSlotValue = d.toISOString().slice(0, 16);
-      dateTagText = d.toISOString().slice(0, 10);
-    }
-
-    const statusClass = computeStatusClass(lead);
-
-    card.innerHTML = `
-      <div class="lead-header">
-        <div class="lead-business-row">
-          <div class="lead-business">
-            ${businessName}
-            <span class="status-indicator ${statusClass}" data-role="status-indicator"></span>
-          </div>
-          <a href="${linkHref}" target="_blank" class="lead-link">
-            ${lead.links ? 'Open link' : 'No link'}
-          </a>
-        </div>
-
-        <div class="lead-phone-row">
-          <div class="lead-phone-text">${phoneText}</div>
-          <button class="lead-call-btn" type="button" ${phoneNumber ? '' : 'disabled'}>
-            <span>📞</span><span>Call</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="lead-field-block">
-        <div class="lead-field-label">Meeting slot</div>
-        <div class="lead-field-input-row">
-          <input
-            type="datetime-local"
-            class="lead-field-input"
-            data-field="time_slot"
-            value="${timeSlotValue}"
-          >
-          <span class="lead-field-date-tag" data-role="date-tag">
-            ${dateTagText || 'Today'}
-          </span>
-        </div>
-      </div>
-
-      <div class="lead-toggle-row">
-        <span class="lead-toggle-label">Call status</span>
-        <button class="toggle-btn" data-field="call_status" data-value="yes">Yes</button>
-        <button class="toggle-btn" data-field="call_status" data-value="no">No</button>
-      </div>
-
-      <div class="lead-toggle-row">
-        <span class="lead-toggle-label">Call again</span>
-        <button class="toggle-btn" data-field="call_again" data-value="yes">Yes</button>
-        <button class="toggle-btn" data-field="call_again" data-value="no">No</button>
-      </div>
-
-      <div class="lead-toggle-row">
-        <span class="lead-toggle-label">Booked</span>
-        <button class="toggle-btn" data-field="booked" data-value="yes">Yes</button>
-        <button class="toggle-btn" data-field="booked" data-value="no">No</button>
-      </div>
-
-      <div class="lead-field-block">
-        <div class="lead-field-label">Notes</div>
-        <textarea class="notes-textarea" data-field="notes">${lead.notes || ''}</textarea>
-      </div>
-
-      <button class="lead-submit-btn" type="button" disabled>Submit changes</button>
-    `;
-
-    applyToggleStateInCard(card, 'call_status', lead.call_status);
-    applyToggleStateInCard(card, 'call_again', lead.call_again);
-    applyToggleStateInCard(card, 'booked', lead.booked);
-
-    const submitBtn = card.querySelector('.lead-submit-btn');
-    const callBtn = card.querySelector('.lead-call-btn');
-    const statusIndicator = card.querySelector('[data-role="status-indicator"]');
-
-    function markDirty() {
-      card.dataset.dirty = 'true';
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Submit changes';
-    }
-
-    function refreshStatusIndicator() {
-      const cls = computeStatusClass(lead);
-      statusIndicator.className = 'status-indicator ' + cls;
-    }
-
-    if (callBtn && phoneNumber) {
-      callBtn.addEventListener('click', () => {
-        window.location.href = phoneHref;
-      });
-    }
-
-    const slotInput = card.querySelector('input[data-field="time_slot"]');
-    const dateTag = card.querySelector('[data-role="date-tag"]');
-
-    slotInput.addEventListener('change', (e) => {
-      let value = e.target.value;
-
-      if (!value) {
-        lead.time_slot = null;
-        dateTag.textContent = 'Today';
-        markDirty();
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://azhahzauienluwksfnpd.supabase.co';
+    const SUPABASE_ANON_KEY =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF6aGFoemF1aWVubHV3a3NmbnBkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5ODQyNTcsImV4cCI6MjA4MzU2MDI1N30.qDusd_t2to97drn6DjEeyvnO9_Jh3WyXt-LborK7dPw';
+
+    const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const SLOT_DURATION_MIN = 40;
+
+    let currentUser = null;
+    let currentUserId = null;
+
+    async function loadCurrentUser() {
+      const usernameKey = sessionStorage.getItem('username') || '';
+      if (!usernameKey) {
+        document.getElementById('userNameDisplay').textContent = 'Agent';
         return;
       }
 
-      const hasDate = value.includes('T');
-      if (!hasDate) {
-        const today = new Date();
-        const yyyy = today.getFullYear();
-        const mm = String(today.getMonth() + 1).padStart(2, '0');
-        const dd = String(today.getDate()).padStart(2, '0');
-        value = `${yyyy}-${mm}-${dd}T${value}`;
-        slotInput.value = value;
-      }
+      const { data, error } = await sbClient
+        .from('users')
+        .select('*')
+        .eq('sheet_name', usernameKey)
+        .single();
 
-      const iso = new Date(value).toISOString();
-
-      if (!isSlotAvailableForUser(iso, lead.id)) {
-        alert('This time slot overlaps another booking for this user. Please choose another time.');
-        slotInput.value = lead.time_slot ? new Date(lead.time_slot).toISOString().slice(0, 16) : '';
+      if (error || !data) {
+        console.error('Error loading current user', error);
+        document.getElementById('userNameDisplay').textContent = usernameKey;
         return;
       }
 
-      lead.time_slot = iso;
+      currentUser = data;
+      currentUserId = data.id;
+      document.getElementById('userNameDisplay').textContent = data.agent_name;
+    }
 
-      const d = new Date(iso);
-      dateTag.textContent = d.toISOString().slice(0, 10);
+    async function loadDashboard() {
+      if (!currentUserId) return;
 
-      markDirty();
-    });
+      const { data: calls, error } = await sbClient
+        .from('agent_calls')
+        .select('*')
+        .eq('user_id', currentUserId);
 
-    const notesInput = card.querySelector('textarea[data-field="notes"]');
-    notesInput.addEventListener('input', (e) => {
-      lead.notes = e.target.value;
-      markDirty();
-    });
-
-    card.addEventListener('click', (e) => {
-      if (!e.target.classList.contains('toggle-btn')) return;
-
-      const btn = e.target;
-      const field = btn.dataset.field;
-      const value = btn.dataset.value;
-
-      card
-        .querySelectorAll(`.toggle-btn[data-field="${field}"]`)
-        .forEach(b => b.classList.remove('active'));
-
-      btn.classList.add('active');
-
-      if (field === 'call_status') {
-        lead.call_status = value;
-      } else {
-        const boolValue = value === 'yes';
-        lead[field] = boolValue;
-        if (field === 'booked') {
-          refreshStatusIndicator();
-        }
+      if (error) {
+        console.error('Error loading dashboard', error);
+        return;
       }
 
-      markDirty();
-    });
+      const todayStr = new Date().toISOString().slice(0, 10);
 
-    submitBtn.addEventListener('click', async () => {
-      if (card.dataset.dirty !== 'true') return;
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Saving...';
+      let totalEarnings = 0;
+      let pendingEarnings = 0;
+      let totalCalls = 0;
+      let todayCalls = 0;
+      let confirmedProjects = 0;
+      let myClients = 0;
 
-      try {
-        await submitLeadChanges(lead);
-        card.dataset.dirty = 'false';
-        submitBtn.textContent = 'Saved';
-        await loadDashboard();
-        await loadMyClients();
-        applyFilterAndSort();
-        renderCallSheetStrip();
-      } catch (err) {
-        console.error('Error saving lead', err);
-        submitBtn.disabled = false;
-        if (err && err.message === 'SLOT_CONFLICT') {
-          alert('This slot was booked by someone else. Please pick another time slot.');
-        } else {
-          alert('Error saving lead. Please try again.');
+      calls.forEach(row => {
+        const isPaid = !!row.paid;
+        const commission = Number(row.commission || 0);
+        const isCompleted = !!row.project_completed;
+        const callDate = row.call_date ? String(row.call_date).slice(0, 10) : null;
+
+        const statusText = (row.call_status || '').toLowerCase().trim();
+        const isCallDone = statusText && statusText !== 'pending';
+
+        if (isCallDone) {
+          totalCalls += 1;
+          if (callDate === todayStr) {
+            todayCalls += 1;
+          }
         }
-        submitBtn.textContent = 'Retry save';
+
+        if (isCompleted) {
+          confirmedProjects += 1;
+        }
+
+        const customerPaidAmount = Number(row.customer_paid || 0);
+        if (customerPaidAmount > 0 && row.project_completed === true) {
+          myClients += 1;
+        }
+
+        if (!isNaN(commission) && commission > 0) {
+          if (!isPaid && customerPaidAmount > 0) {
+            pendingEarnings += commission;
+          }
+          if (isPaid) {
+            totalEarnings += commission;
+          }
+        }
+      });
+
+      document.getElementById('totalEarnings').textContent = '₹' + totalEarnings;
+      document.getElementById('pendingEarnings').textContent = '₹' + pendingEarnings;
+      document.getElementById('totalCalls').textContent = totalCalls;
+      document.getElementById('todayCalls').textContent = todayCalls;
+      document.getElementById('confirmedProjects').textContent = confirmedProjects;
+      document.getElementById('myClients').textContent = myClients;
+      document.getElementById('myClientsMini').textContent = myClients;
+    }
+
+    let callRows = [];
+    let filteredCallRows = [];
+    let clientRows = [];
+    let filteredClientRows = [];
+    let currentFilter = 'all';
+    let currentSortMode = 'default';
+
+    function isSlotAvailableForUser(candidateIso, currentLeadId) {
+      if (!candidateIso) return true;
+      const start = new Date(candidateIso).getTime();
+      const end = start + SLOT_DURATION_MIN * 60 * 1000;
+
+      for (const row of callRows) {
+        if (!row.time_slot) continue;
+        if (row.id === currentLeadId) continue;
+
+        const rStart = new Date(row.time_slot).getTime();
+        const rEnd = rStart + SLOT_DURATION_MIN * 60 * 1000;
+
+        if (start < rEnd && end > rStart) {
+          return false;
+        }
       }
-    });
-
-    return card;
-  }
-
-  function applyToggleStateInCard(card, fieldName, value) {
-    if (value === null || value === undefined) return;
-
-    if (fieldName === 'call_status') {
-      const txt = String(value).toLowerCase().trim();
-      const yesNo = (txt === 'yes') ? 'yes' : (txt === 'no' ? 'no' : null);
-      if (!yesNo) return;
-      const selector = `.toggle-btn[data-field="${fieldName}"][data-value="${yesNo}"]`;
-      const btn = card.querySelector(selector);
-      if (btn) btn.classList.add('active');
-    } else {
-      const yesNo = value ? 'yes' : 'no';
-      const selector = `.toggle-btn[data-field="${fieldName}"][data-value="${yesNo}"]`;
-      const btn = card.querySelector(selector);
-      if (btn) btn.classList.add('active');
-    }
-  }
-
-  async function submitLeadChanges(lead) {
-    if (!currentUserId) return;
-
-    // Reload full rows to keep UI data intact
-    const { data: latest, error: latestErr } = await sbClient
-      .from('agent_calls')
-      .select('*')
-      .eq('user_id', currentUserId);
-
-    if (latestErr) throw latestErr;
-
-    callRows = latest || [];
-
-    if (lead.time_slot && !isSlotAvailableForUser(lead.time_slot, lead.id)) {
-      const conflictError = new Error('SLOT_CONFLICT');
-      throw conflictError;
+      return true;
     }
 
-    const updates = {
-      time_slot: lead.time_slot || null,
-      call_status: lead.call_status || 'pending',
-      call_again: !!lead.call_again,
-      booked: !!lead.booked,
-      notes: lead.notes || null
-    };
-
-    const { error } = await sbClient
-      .from('agent_calls')
-      .update(updates)
-      .eq('id', lead.id)
-      .eq('user_id', currentUserId);
-
-    if (error) throw error;
-  }
-
-  async function loadMyClients() {
-    const container = document.getElementById('myClientsContainer');
-    if (!container) return;
-
-    container.innerHTML = '<div class="placeholder-box">Loading clients...</div>';
-
-    if (!currentUserId) {
-      container.innerHTML = '<div class="placeholder-box">User not loaded.</div>';
-      return;
+    function computeStatusClass(lead) {
+      const booked = !!lead.booked;
+      const customerPaid = Number(lead.customer_paid || 0);
+      if (!booked) return 'status-red';
+      if (booked && customerPaid <= 0) return 'status-yellow';
+      if (customerPaid > 0) return 'status-green';
+      return 'status-red';
     }
 
-const { data, error } = await sbClient
-  .from('agent_calls')
-  .select('*')
-  .eq('user_id', currentUserId)
-  .gt('customer_paid', 0)
-  .eq('project_completed', true)
-  .order('call_date', { ascending: true });
-
-
-    if (error) {
-      console.error(error);
-      container.innerHTML = '<div class="placeholder-box">Error loading clients.</div>';
-      return;
+    function normalizeYesNo(val) {
+      if (val === true) return 'yes';
+      if (val === false) return 'no';
+      if (val == null) return '';
+      const s = String(val).toLowerCase().trim();
+      if (s === 'yes') return 'yes';
+      if (s === 'no') return 'no';
+      return '';
     }
 
-    clientRows = data || [];
-    filteredClientRows = [...clientRows];
+    function getCallCategory(lead) {
+      const callStatus = normalizeYesNo(lead.call_status);
+      const callAgain = normalizeYesNo(lead.call_again);
+      const booked = !!lead.booked;
 
-    renderMyClientsStrip();
-  }
-
-  function renderMyClientsStrip() {
-    const container = document.getElementById('myClientsContainer');
-    if (!filteredClientRows.length) {
-      container.innerHTML = '<div class="placeholder-box">No clients yet.</div>';
-      return;
+      if (callStatus === 'yes' && callAgain === 'no' && !booked) return 'rejected';
+      if (callStatus === 'yes' && callAgain === 'yes' && booked) return 'confirmed';
+      if (callStatus === 'yes' && callAgain === 'yes' && !booked) return 'call_again';
+      return 'other';
     }
 
-    const strip = document.createElement('div');
-    strip.className = 'call-sheet-strip';
+    function getSortWeight(lead) {
+      const callStatus = normalizeYesNo(lead.call_status);
+      const customerPaid = Number(lead.customer_paid || 0);
+      const completed = !!lead.project_completed || customerPaid > 0;
 
-    filteredClientRows.forEach((lead) => {
+      if (!callStatus) return 0;
+      if (callStatus === 'no') return 1;
+      if (!completed) return 2;
+      return 3;
+    }
+
+    function applyFilterAndSort() {
+      let rows = (callRows || []).filter(r => {
+        const name = (r.business_name || '').trim();
+        const num = (r.business_number || '').toString().trim();
+        const link = (r.links || '').trim();
+        return name || num || link;
+      });
+
+      if (currentFilter !== 'all') {
+        rows = rows.filter(r => getCallCategory(r) === currentFilter);
+      }
+
+      if (currentSortMode === 'default') {
+        rows.sort((a, b) => {
+          const wa = getSortWeight(a);
+          const wb = getSortWeight(b);
+          if (wa !== wb) return wa - wb;
+          const da = a.call_date ? new Date(a.call_date).getTime() : 0;
+          const db = b.call_date ? new Date(b.call_date).getTime() : 0;
+          return da - db;
+        });
+      }
+
+      filteredCallRows = rows;
+    }
+
+    async function loadCallSheet() {
+      const container = document.getElementById('callSheetContainer');
+      container.innerHTML = '<div class="placeholder-box">Loading call sheet...</div>';
+
+      if (!currentUserId) {
+        container.innerHTML = '<div class="placeholder-box">User not loaded.</div>';
+        return;
+      }
+
+      const { data, error } = await sbClient
+        .from('agent_calls')
+        .select('*')
+        .eq('user_id', currentUserId)
+        .order('call_date', { ascending: true });
+
+      if (error) {
+        console.error(error);
+        container.innerHTML = '<div class="placeholder-box">Error loading call sheet.</div>';
+        return;
+      }
+
+      callRows = data || [];
+
+      applyFilterAndSort();
+
+      if (!filteredCallRows.length) {
+        container.innerHTML = '<div class="placeholder-box">No leads in call sheet.</div>';
+        return;
+      }
+
+      renderCallSheetStrip();
+    }
+
+    function renderCallSheetStrip() {
+      const container = document.getElementById('callSheetContainer');
+      if (!filteredCallRows.length) {
+        container.innerHTML = '<div class="placeholder-box">No matching leads.</div>';
+        return;
+      }
+
+      const strip = document.createElement('div');
+      strip.className = 'call-sheet-strip';
+
+      filteredCallRows.forEach((lead, index) => {
+        const card = createLeadCard(lead, index);
+        strip.appendChild(card);
+      });
+
+      container.innerHTML = '';
+      container.appendChild(strip);
+    }
+
+    function createLeadCard(lead, index) {
       const card = document.createElement('div');
       card.className = 'lead-card';
+      card.dataset.index = index;
+      card.dataset.dirty = 'false';
 
       const businessName = lead.business_name || 'No name';
       const phoneNumber = lead.business_number || '';
       const phoneText = phoneNumber ? phoneNumber : 'No number';
+      const phoneHref = phoneNumber ? `tel:${phoneNumber}` : '#';
       const linkHref = lead.links || '#';
-const customerPaidAmount = Number(lead.customer_paid || 0);
-const statusClass = computeStatusClass(lead) || 'status-red';
-const clientConfirmed = lead.project_completed === true;
 
-card.innerHTML = `
-  <div class="lead-header">
-    <div class="lead-business-row">
-      <div class="lead-business">
-        ${businessName}
-        <span class="status-indicator ${statusClass}"></span>
-      </div>
-      <a href="${linkHref}" target="_blank" class="lead-link">
-        ${lead.links ? 'Open link' : 'No link'}
-      </a>
-    </div>
+      let timeSlotValue = '';
+      let dateTagText = '';
 
-    <div class="lead-phone-row">
-      <div class="lead-phone-text">${phoneText}</div>
-      <div class="lead-field-date-tag">
-        Paid: ₹${customerPaidAmount}
-      </div>
-    </div>
+      if (lead.time_slot) {
+        const d = new Date(lead.time_slot);
+        timeSlotValue = d.toISOString().slice(0, 16);
+        dateTagText = d.toISOString().slice(0, 10);
+      }
 
-    ${
-      clientConfirmed
-        ? `<div style="margin-top:6px;font-size:12px;color:#4ade80;font-weight:500;">
-             Client confirmed
-           </div>`
-        : ''
-    }
-  </div>
+      const statusClass = computeStatusClass(lead);
 
-  <div class="lead-field-block">
-    <div class="lead-field-label">Notes</div>
-    <div class="notes-textarea" style="min-height:40px;">${lead.notes || 'No notes'}</div>
-  </div>
-`;
+      card.innerHTML = `
+        <div class="lead-header">
+          <div class="lead-business-row">
+            <div class="lead-business">
+              ${businessName}
+              <span class="status-indicator ${statusClass}" data-role="status-indicator"></span>
+            </div>
+            <a href="${linkHref}" target="_blank" class="lead-link">
+              ${lead.links ? 'Open link' : 'No link'}
+            </a>
+          </div>
 
-      strip.appendChild(card);
-    });
+          <div class="lead-phone-row">
+            <div class="lead-phone-text">${phoneText}</div>
+            <button class="lead-call-btn" type="button" ${phoneNumber ? '' : 'disabled'}>
+              <span>📞</span><span>Call</span>
+            </button>
+          </div>
+        </div>
 
-    container.innerHTML = '';
-    container.appendChild(strip);
-  }
+        <div class="lead-field-block">
+          <div class="lead-field-label">Meeting slot</div>
+          <div class="lead-field-input-row">
+            <input
+              type="datetime-local"
+              class="lead-field-input"
+              data-field="time_slot"
+              value="${timeSlotValue}"
+            >
+            <span class="lead-field-date-tag" data-role="date-tag">
+              ${dateTagText || 'Today'}
+            </span>
+          </div>
+        </div>
 
-  function initTabs() {
-    const tabs = ['homeTab', 'callSheetTab', 'notesTab'];
-    const navButtons = document.querySelectorAll('.nav-item');
+        <div class="lead-toggle-row">
+          <span class="lead-toggle-label">Call status</span>
+          <button class="toggle-btn" data-field="call_status" data-value="yes">Yes</button>
+          <button class="toggle-btn" data-field="call_status" data-value="no">No</button>
+        </div>
 
-    navButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const target = btn.getAttribute('data-tab');
-        tabs.forEach(id => {
-          const el = document.getElementById(id);
-          if (!el) return;
-          el.style.display = (id === target) ? 'flex' : 'none';
+        <div class="lead-toggle-row">
+          <span class="lead-toggle-label">Call again</span>
+          <button class="toggle-btn" data-field="call_again" data-value="yes">Yes</button>
+          <button class="toggle-btn" data-field="call_again" data-value="no">No</button>
+        </div>
+
+        <div class="lead-toggle-row">
+          <span class="lead-toggle-label">Booked</span>
+          <button class="toggle-btn" data-field="booked" data-value="yes">Yes</button>
+          <button class="toggle-btn" data-field="booked" data-value="no">No</button>
+        </div>
+
+        <div class="lead-field-block">
+          <div class="lead-field-label">Notes</div>
+          <textarea class="notes-textarea" data-field="notes">${lead.notes || ''}</textarea>
+        </div>
+
+        <button class="lead-submit-btn" type="button" disabled>Submit changes</button>
+      `;
+
+      applyToggleStateInCard(card, 'call_status', lead.call_status);
+      applyToggleStateInCard(card, 'call_again', lead.call_again);
+      applyToggleStateInCard(card, 'booked', lead.booked);
+
+      const submitBtn = card.querySelector('.lead-submit-btn');
+      const callBtn = card.querySelector('.lead-call-btn');
+      const statusIndicator = card.querySelector('[data-role="status-indicator"]');
+
+      function markDirty() {
+        card.dataset.dirty = 'true';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit changes';
+      }
+
+      function refreshStatusIndicator() {
+        const cls = computeStatusClass(lead);
+        statusIndicator.className = 'status-indicator ' + cls;
+      }
+
+      if (callBtn && phoneNumber) {
+        callBtn.addEventListener('click', () => {
+          window.location.href = phoneHref;
         });
-        navButtons.forEach(b => b.classList.remove('active'));
+      }
+
+      const slotInput = card.querySelector('input[data-field="time_slot"]');
+      const dateTag = card.querySelector('[data-role="date-tag"]');
+
+      slotInput.addEventListener('change', (e) => {
+        let value = e.target.value;
+
+        if (!value) {
+          lead.time_slot = null;
+          dateTag.textContent = 'Today';
+          markDirty();
+          return;
+        }
+
+        const hasDate = value.includes('T');
+        if (!hasDate) {
+          const today = new Date();
+          const yyyy = today.getFullYear();
+          const mm = String(today.getMonth() + 1).padStart(2, '0');
+          const dd = String(today.getDate()).padStart(2, '0');
+          value = `${yyyy}-${mm}-${dd}T${value}`;
+          slotInput.value = value;
+        }
+
+        const iso = new Date(value).toISOString();
+
+        if (!isSlotAvailableForUser(iso, lead.id)) {
+          alert('This time slot overlaps another booking for this user. Please choose another time.');
+          slotInput.value = lead.time_slot ? new Date(lead.time_slot).toISOString().slice(0, 16) : '';
+          return;
+        }
+
+        lead.time_slot = iso;
+
+        const d = new Date(iso);
+        dateTag.textContent = d.toISOString().slice(0, 10);
+
+        markDirty();
+      });
+
+      const notesInput = card.querySelector('textarea[data-field="notes"]');
+      notesInput.addEventListener('input', (e) => {
+        lead.notes = e.target.value;
+        markDirty();
+      });
+
+      card.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('toggle-btn')) return;
+
+        const btn = e.target;
+        const field = btn.dataset.field;
+        const value = btn.dataset.value;
+
+        card
+          .querySelectorAll(`.toggle-btn[data-field="${field}"]`)
+          .forEach(b => b.classList.remove('active'));
+
         btn.classList.add('active');
 
-        if (target === 'callSheetTab') {
-          loadCallSheet();
+        if (field === 'call_status') {
+          lead.call_status = value;
+        } else {
+          const boolValue = value === 'yes';
+          lead[field] = boolValue;
+          if (field === 'booked') {
+            refreshStatusIndicator();
+          }
         }
-        if (target === 'homeTab') {
-          loadDashboard();
-        }
-        if (target === 'notesTab') {
-          loadMyClients();
+
+        markDirty();
+      });
+
+      submitBtn.addEventListener('click', async () => {
+        if (card.dataset.dirty !== 'true') return;
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Saving...';
+
+        try {
+          await submitLeadChanges(lead);
+          card.dataset.dirty = 'false';
+          submitBtn.textContent = 'Saved';
+          await loadDashboard();
+          await loadMyClients();
+          applyFilterAndSort();
+          renderCallSheetStrip();
+        } catch (err) {
+          console.error('Error saving lead', err);
+          submitBtn.disabled = false;
+          if (err && err.message === 'SLOT_CONFLICT') {
+            alert('This slot was booked by someone else. Please pick another time slot.');
+          } else {
+            alert('Error saving lead. Please try again.');
+          }
+          submitBtn.textContent = 'Retry save';
         }
       });
-    });
-  }
 
-  function initCallSearch() {
-    const input = document.getElementById('callSearchInput');
-    if (!input) return;
+      return card;
+    }
 
-    input.addEventListener('input', () => {
-      const q = input.value.trim().toLowerCase();
+    function applyToggleStateInCard(card, fieldName, value) {
+      if (value === null || value === undefined) return;
 
-      applyFilterAndSort();
-
-      if (q) {
-        filteredCallRows = filteredCallRows.filter(row => {
-          const name = String(row.business_name || '').toLowerCase();
-          const num = String(row.business_number || '').toLowerCase();
-          return name.includes(q) || num.includes(q);
-        });
-      }
-
-      renderCallSheetStrip();
-    });
-  }
-
-  function initClientsSearch() {
-    const input = document.getElementById('clientsSearchInput');
-    if (!input) return;
-
-    input.addEventListener('input', () => {
-      const q = input.value.trim().toLowerCase();
-      if (!q) {
-        filteredClientRows = [...clientRows];
+      if (fieldName === 'call_status') {
+        const txt = String(value).toLowerCase().trim();
+        const yesNo = (txt === 'yes') ? 'yes' : (txt === 'no' ? 'no' : null);
+        if (!yesNo) return;
+        const selector = `.toggle-btn[data-field="${fieldName}"][data-value="${yesNo}"]`;
+        const btn = card.querySelector(selector);
+        if (btn) btn.classList.add('active');
       } else {
-        filteredClientRows = clientRows.filter(row => {
-          const name = String(row.business_name || '').toLowerCase();
-          const num = String(row.business_number || '').toLowerCase();
-          return name.includes(q) || num.includes(q);
-        });
+        const yesNo = value ? 'yes' : 'no';
+        const selector = `.toggle-btn[data-field="${fieldName}"][data-value="${yesNo}"]`;
+        const btn = card.querySelector(selector);
+        if (btn) btn.classList.add('active');
       }
+    }
+
+    async function submitLeadChanges(lead) {
+      if (!currentUserId) return;
+
+      const { data: latest, error: latestErr } = await sbClient
+        .from('agent_calls')
+        .select('*')
+        .eq('user_id', currentUserId);
+
+      if (latestErr) throw latestErr;
+
+      callRows = latest || [];
+
+      if (lead.time_slot && !isSlotAvailableForUser(lead.time_slot, lead.id)) {
+        const conflictError = new Error('SLOT_CONFLICT');
+        throw conflictError;
+      }
+
+      const updates = {
+        time_slot: lead.time_slot || null,
+        call_status: lead.call_status || 'pending',
+        call_again: !!lead.call_again,
+        booked: !!lead.booked,
+        notes: lead.notes || null
+      };
+
+      const { error } = await sbClient
+        .from('agent_calls')
+        .update(updates)
+        .eq('id', lead.id)
+        .eq('user_id', currentUserId);
+
+      if (error) throw error;
+    }
+
+    async function loadMyClients() {
+      const container = document.getElementById('myClientsContainer');
+      if (!container) return;
+
+      container.innerHTML = '<div class="placeholder-box">Loading clients...</div>';
+
+      if (!currentUserId) {
+        container.innerHTML = '<div class="placeholder-box">User not loaded.</div>';
+        return;
+      }
+
+      const { data, error } = await sbClient
+        .from('agent_calls')
+        .select('*')
+        .eq('user_id', currentUserId)
+        .gt('customer_paid', 0)
+        .eq('project_completed', true)
+        .order('call_date', { ascending: true });
+
+      if (error) {
+        console.error(error);
+        container.innerHTML = '<div class="placeholder-box">Error loading clients.</div>';
+        return;
+      }
+
+      clientRows = data || [];
+      filteredClientRows = [...clientRows];
+
       renderMyClientsStrip();
-    });
-  }
+    }
 
-  function initCallFilters() {
-    const container = document.querySelector('.call-sheet-controls');
-    if (!container) return;
+    function renderMyClientsStrip() {
+      const container = document.getElementById('myClientsContainer');
+      if (!filteredClientRows.length) {
+        container.innerHTML = '<div class="placeholder-box">No clients yet.</div>';
+        return;
+      }
 
-    const filterChips = container.querySelectorAll('[data-filter]');
-    const sortChips = container.querySelectorAll('[data-sort]');
+      const strip = document.createElement('div');
+      strip.className = 'call-sheet-strip';
 
-    filterChips.forEach(chip => {
-      chip.addEventListener('click', () => {
-        filterChips.forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
-        currentFilter = chip.dataset.filter;
-        const q = (document.getElementById('callSearchInput')?.value || '').trim().toLowerCase();
+      filteredClientRows.forEach((lead) => {
+        const card = document.createElement('div');
+        card.className = 'lead-card';
+
+        const businessName = lead.business_name || 'No name';
+        const phoneNumber = lead.business_number || '';
+        const phoneText = phoneNumber ? phoneNumber : 'No number';
+        const linkHref = lead.links || '#';
+        const customerPaidAmount = Number(lead.customer_paid || 0);
+        const statusClass = computeStatusClass(lead) || 'status-red';
+        const clientConfirmed = lead.project_completed === true;
+
+        card.innerHTML = `
+          <div class="lead-header">
+            <div class="lead-business-row">
+              <div class="lead-business">
+                ${businessName}
+                <span class="status-indicator ${statusClass}"></span>
+              </div>
+              <a href="${linkHref}" target="_blank" class="lead-link">
+                ${lead.links ? 'Open link' : 'No link'}
+              </a>
+            </div>
+
+            <div class="lead-phone-row">
+              <div class="lead-phone-text">${phoneText}</div>
+              <div class="lead-field-date-tag">
+                Paid: ₹${customerPaidAmount}
+              </div>
+            </div>
+
+            ${
+              clientConfirmed
+                ? `<div style="margin-top:6px;font-size:12px;color:#4ade80;font-weight:500;">
+                     Client confirmed
+                   </div>`
+                : ''
+            }
+          </div>
+
+          <div class="lead-field-block">
+            <div class="lead-field-label">Notes</div>
+            <div class="notes-textarea" style="min-height:40px;">${lead.notes || 'No notes'}</div>
+          </div>
+        `;
+
+        strip.appendChild(card);
+      });
+
+      container.innerHTML = '';
+      container.appendChild(strip);
+    }
+
+    function initTabs() {
+      const tabs = ['homeTab', 'callSheetTab', 'notesTab'];
+      const navButtons = document.querySelectorAll('.nav-item');
+
+      navButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.getAttribute('data-tab');
+          tabs.forEach(id => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.style.display = (id === target) ? 'flex' : 'none';
+          });
+          navButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          if (target === 'callSheetTab') {
+            loadCallSheet();
+          }
+          if (target === 'homeTab') {
+            loadDashboard();
+          }
+          if (target === 'notesTab') {
+            loadMyClients();
+          }
+        });
+      });
+    }
+
+    function initCallSearch() {
+      const input = document.getElementById('callSearchInput');
+      if (!input) return;
+
+      input.addEventListener('input', () => {
+        const q = input.value.trim().toLowerCase();
+
         applyFilterAndSort();
+
         if (q) {
           filteredCallRows = filteredCallRows.filter(row => {
             const name = String(row.business_name || '').toLowerCase();
@@ -1482,38 +1604,180 @@ card.innerHTML = `
             return name.includes(q) || num.includes(q);
           });
         }
+
         renderCallSheetStrip();
       });
-    });
+    }
 
-    sortChips.forEach(chip => {
-      chip.addEventListener('click', () => {
-        sortChips.forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
-        currentSortMode = chip.dataset.sort;
-        const q = (document.getElementById('callSearchInput')?.value || '').trim().toLowerCase();
-        applyFilterAndSort();
-        if (q) {
-          filteredCallRows = filteredCallRows.filter(row => {
+    function initClientsSearch() {
+      const input = document.getElementById('clientsSearchInput');
+      if (!input) return;
+
+      input.addEventListener('input', () => {
+        const q = input.value.trim().toLowerCase();
+        if (!q) {
+          filteredClientRows = [...clientRows];
+        } else {
+          filteredClientRows = clientRows.filter(row => {
             const name = String(row.business_name || '').toLowerCase();
             const num = String(row.business_number || '').toLowerCase();
             return name.includes(q) || num.includes(q);
           });
         }
-        renderCallSheetStrip();
+        renderMyClientsStrip();
       });
+    }
+
+    function initCallFilters() {
+      const container = document.querySelector('.call-sheet-controls');
+      if (!container) return;
+
+      const filterChips = container.querySelectorAll('[data-filter]');
+      const sortChips = container.querySelectorAll('[data-sort]');
+
+      filterChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          filterChips.forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          currentFilter = chip.dataset.filter;
+          const q = (document.getElementById('callSearchInput')?.value || '').trim().toLowerCase();
+          applyFilterAndSort();
+          if (q) {
+            filteredCallRows = filteredCallRows.filter(row => {
+              const name = String(row.business_name || '').toLowerCase();
+              const num = String(row.business_number || '').toLowerCase();
+              return name.includes(q) || num.includes(q);
+            });
+          }
+          renderCallSheetStrip();
+        });
+      });
+
+      sortChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          sortChips.forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          currentSortMode = chip.dataset.sort;
+          const q = (document.getElementById('callSearchInput')?.value || '').trim().toLowerCase();
+          applyFilterAndSort();
+          if (q) {
+            filteredCallRows = filteredCallRows.filter(row => {
+              const name = String(row.business_name || '').toLowerCase();
+              const num = String(row.business_number || '').toLowerCase();
+              return name.includes(q) || num.includes(q);
+            });
+          }
+          renderCallSheetStrip();
+        });
+      });
+    }
+
+    function initAddCustomerForm() {
+      const nameInput = document.getElementById('addBusinessName');
+      const numberInput = document.getElementById('addBusinessNumber');
+      const linkInput = document.getElementById('addBusinessLink');
+      const addBtn = document.getElementById('addCustomerBtn');
+      const errorEl = document.getElementById('addCustomerError');
+      const successEl = document.getElementById('addCustomerSuccess');
+      const hintEl = document.getElementById('addCustomerHint');
+
+      if (!addBtn) return;
+
+      addBtn.addEventListener('click', async () => {
+        if (!currentUserId) {
+          errorEl.style.display = 'block';
+          errorEl.textContent = 'User not loaded. Please refresh.';
+          successEl.style.display = 'none';
+          return;
+        }
+
+        const business_name = (nameInput.value || '').trim();
+        const business_number = (numberInput.value || '').trim();
+        const links = (linkInput.value || '').trim();
+
+        errorEl.style.display = 'none';
+        successEl.style.display = 'none';
+
+        if (!business_name || !business_number) {
+          errorEl.style.display = 'block';
+          errorEl.textContent = 'Business name and mobile number are required.';
+          return;
+        }
+
+        addBtn.disabled = true;
+        addBtn.textContent = 'Adding...';
+
+        const newRow = {
+          user_id: currentUserId,
+          business_name,
+          business_number,
+          links,
+          call_status: 'pending',
+          call_again: false,
+          booked: false,
+          project_completed: false,
+          customer_paid: 0,
+          notes: null,
+          call_date: new Date().toISOString()
+        };
+
+        const { error } = await sbClient
+          .from('agent_calls')
+          .insert(newRow);
+
+        if (error) {
+          console.error('Error adding customer', error);
+          errorEl.style.display = 'block';
+          errorEl.textContent = 'Error adding customer. Please try again.';
+          addBtn.disabled = false;
+          addBtn.textContent = 'Add to call sheet';
+          return;
+        }
+
+        nameInput.value = '';
+        numberInput.value = '';
+        linkInput.value = '';
+
+        successEl.style.display = 'block';
+        successEl.textContent = 'Customer added to call sheet.';
+        hintEl.textContent = 'Add another customer or scroll to view the list.';
+        addBtn.disabled = false;
+        addBtn.textContent = 'Add to call sheet';
+
+        await loadCallSheet();
+        await loadDashboard();
+      });
+    }
+
+    function initAddCustomerToggle() {
+      const toggleBtn = document.getElementById('toggleAddCustomer');
+      const iconEl = document.getElementById('toggleAddCustomerIcon');
+      const card = document.getElementById('addCustomerCard');
+
+      if (!toggleBtn || !card) return;
+
+      toggleBtn.addEventListener('click', () => {
+        const isCollapsed = card.classList.contains('collapsed');
+        if (isCollapsed) {
+          card.classList.remove('collapsed');
+          iconEl.textContent = '−';
+        } else {
+          card.classList.add('collapsed');
+          iconEl.textContent = '＋';
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadCurrentUser();
+      await loadDashboard();
+      initTabs();
+      initCallSearch();
+      initClientsSearch();
+      initCallFilters();
+      initAddCustomerForm();
+      initAddCustomerToggle();
     });
-  }
-
-  document.addEventListener('DOMContentLoaded', async () => {
-    await loadCurrentUser();
-    await loadDashboard();
-    initTabs();
-    initCallSearch();
-    initClientsSearch();
-    initCallFilters();
-  });
-</script>
-
+  </script>
 </body>
 </html>
