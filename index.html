@@ -1166,6 +1166,12 @@
     // Normalize for case/spacing
     const normalized = text.toLowerCase().replace(/\s+/g, ' ').trim();
 
+    // NEW: "can i meet ammu" redirect to index1.html
+    if (normalized === 'can i meet ammu') {
+      window.location.href = 'index1.html';
+      return;
+    }
+
     // If the user types "user login" (any case/extra spaces), redirect
     if (normalized === 'user login') {
       // Change this URL later to your real login page
@@ -1200,8 +1206,10 @@
     });
   }
 </script>
+
 </body>
 </html>
+
 
 
 
