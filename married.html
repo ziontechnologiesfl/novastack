@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>We Are Married 💍</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="https://cdn.jsdelivr.net/npm/[email protected]/dist/confetti.browser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     * {
       margin: 0;
@@ -29,7 +29,6 @@
       position: relative;
     }
 
-    /* Confetti canvas */
     #confetti-canvas {
       position: fixed;
       inset: 0;
@@ -167,9 +166,10 @@
       }
     }
 
+    /* smaller big heart */
     .big-heart {
-      width: 80px;
-      height: 80px;
+      width: 40px;   /* was 80px */
+      height: 40px;  /* was 80px */
       background-color: #ff4b8b;
       margin: 10px auto 14px;
       transform: rotate(-45deg);
@@ -181,19 +181,19 @@
     .big-heart::after {
       content: "";
       position: absolute;
-      width: 80px;
-      height: 80px;
+      width: 40px;   /* was 80px */
+      height: 40px;  /* was 80px */
       background-color: #ff4b8b;
       border-radius: 50%;
     }
 
     .big-heart::before {
-      top: -40px;
+      top: -20px;    /* half of height */
       left: 0;
     }
 
     .big-heart::after {
-      left: 40px;
+      left: 20px;    /* half of width */
       top: 0;
     }
 
@@ -308,8 +308,6 @@
           Screenshot this and never forget: you said yes to a love that never lets you go.
         </div>
       </div>
-
-      
     </div>
   </div>
 
@@ -330,12 +328,7 @@
       })();
     }
 
-    // Fire confetti as soon as page loads
     window.addEventListener('load', launchConfetti);
-
-    document.getElementById('closeBtn').addEventListener('click', () => {
-      launchConfetti();
-    });
   </script>
 </body>
 </html>
