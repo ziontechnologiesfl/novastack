@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>We Are Married 💍</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.jsdelivr.net/npm/[email protected]/dist/confetti.browser.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #ff9a9e 0, #1f0026 45%, #05010a 100%);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 16px;
+      position: relative;
+    }
+
+    /* Confetti canvas */
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    /* Floating hearts background */
+    .heart {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      background-color: #ff4b8b;
+      transform: rotate(45deg);
+      animation: float 8s linear infinite;
+      opacity: 0.7;
+      z-index: 1;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      background-color: #ff4b8b;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -9px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -9px;
+      top: 0;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(45deg) scale(0.9);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-110vh) rotate(45deg) scale(1.3);
+        opacity: 0;
+      }
+    }
+
+    .wrapper {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .card {
+      background: rgba(15, 4, 26, 0.96);
+      border-radius: 20px;
+      padding: 22px 18px 18px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.7);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: conic-gradient(
+        from 180deg,
+        #ff9a9e,
+        #ffd1ff,
+        #fbc2eb,
+        #a6c0fe,
+        #ff9a9e
+      );
+      opacity: 0.2;
+      filter: blur(20px);
+      animation: spinGlow 12s linear infinite;
+      z-index: -1;
+    }
+
+    @keyframes spinGlow {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .title {
+      font-size: 19px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      animation: fadeDown 0.6s ease-out forwards;
+      opacity: 0;
+    }
+
+    .subtitle-glow {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      background: linear-gradient(120deg, #ff9a9e, #ffe9ff, #ffe082);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 12px rgba(255, 163, 218, 0.9);
+      animation: glowPulse 1.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes glowPulse {
+      0% {
+        text-shadow: 0 0 8px rgba(255, 163, 218, 0.7);
+        transform: scale(1);
+      }
+      100% {
+        text-shadow: 0 0 18px rgba(255, 232, 176, 1);
+        transform: scale(1.04);
+      }
+    }
+
+    @keyframes fadeDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .big-heart {
+      width: 80px;
+      height: 80px;
+      background-color: #ff4b8b;
+      margin: 10px auto 14px;
+      transform: rotate(-45deg);
+      position: relative;
+      animation: heartbeat 1.2s ease-in-out infinite;
+    }
+
+    .big-heart::before,
+    .big-heart::after {
+      content: "";
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      background-color: #ff4b8b;
+      border-radius: 50%;
+    }
+
+    .big-heart::before {
+      top: -40px;
+      left: 0;
+    }
+
+    .big-heart::after {
+      left: 40px;
+      top: 0;
+    }
+
+    @keyframes heartbeat {
+      0% { transform: rotate(-45deg) scale(1); }
+      25% { transform: rotate(-45deg) scale(1.15); }
+      40% { transform: rotate(-45deg) scale(0.95); }
+      60% { transform: rotate(-45deg) scale(1.12); }
+      100% { transform: rotate(-45deg) scale(1); }
+    }
+
+    .text {
+      font-size: 14px;
+      line-height: 1.9;
+      opacity: 0.92;
+      margin-bottom: 14px;
+      animation: fadeUp 0.7s ease-out forwards;
+      opacity: 0;
+      animation-delay: 0.3s;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .line-strong {
+      font-size: 16px;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+
+    .tagline {
+      margin-top: 8px;
+      font-size: 12px;
+      opacity: 0.7;
+    }
+
+    .btn-row {
+      margin-top: 14px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: none;
+      padding: 8px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #ff5f6d, #ffc371);
+      color: #1b0516;
+      box-shadow: 0 8px 26px rgba(0, 0, 0, 0.6);
+    }
+
+    @media (max-width: 400px) {
+      .card {
+        padding: 18px 14px 16px;
+      }
+      .subtitle-glow {
+        font-size: 22px;
+      }
+      .text {
+        font-size: 13px;
+      }
+      .btn {
+        font-size: 12px;
+        padding: 7px 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Floating hearts in the background -->
+  <script>
+    for (let i = 0; i < 20; i++) {
+      const h = document.createElement('div');
+      h.classList.add('heart');
+      h.style.left = Math.random() * 100 + 'vw';
+      h.style.bottom = '-40px';
+      h.style.animationDuration = 4 + Math.random() * 5 + 's';
+      document.body.appendChild(h);
+    }
+  </script>
+
+  <div class="wrapper">
+    <div class="card">
+      <div class="title">You did it, my love… 💫</div>
+      <div class="subtitle-glow">We Are Married</div>
+
+      <div class="big-heart"></div>
+
+      <div class="text">
+        <div>You are mine. I own you, my love, in the sweetest, softest way a heart can hold another. ❤️</div>
+        <div class="line-strong">From this second on, we are married in my soul, my mind, my every heartbeat.</div>
+        <div class="line-strong">Your forever: your King. 👑</div>
+        <div class="tagline">
+          Screenshot this and never forget: you said yes to a love that never lets you go.
+        </div>
+      </div>
+
+      
+    </div>
+  </div>
+
+  <script>
+    function launchConfetti() {
+      const duration = 2500;
+      const end = Date.now() + duration;
+
+      (function frame() {
+        confetti({
+          particleCount: 60,
+          spread: 90,
+          origin: { x: Math.random(), y: Math.random() - 0.2 }
+        });
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      })();
+    }
+
+    // Fire confetti as soon as page loads
+    window.addEventListener('load', launchConfetti);
+
+    document.getElementById('closeBtn').addEventListener('click', () => {
+      launchConfetti();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Yes, My King 💞</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <script src="https://cdn.jsdelivr.net/npm/[email protected]/dist/confetti.browser.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #ff9a9e 0, #1f0026 45%, #05010a 100%);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      overflow: hidden;
+    }
+
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .popup-card {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 360px;
+      background: rgba(15, 4, 26, 0.96);
+      border-radius: 18px;
+      padding: 20px 16px 18px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.7);
+    }
+
+    .popup-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .popup-text {
+      font-size: 14px;
+      line-height: 1.7;
+      opacity: 0.9;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .popup-footer {
+      font-size: 11px;
+      opacity: 0.7;
+      text-align: center;
+      margin-bottom: 14px;
+    }
+
+    .popup-actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: none;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .btn-yes {
+      background: linear-gradient(135deg, #ff5f6d, #ffc371);
+      color: #1b0516;
+    }
+
+    .btn-no {
+      background: transparent;
+      color: #ffd6ff;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+    }
+
+    @media (max-width: 400px) {
+      .popup-card {
+        max-width: 320px;
+        padding: 18px 12px 16px;
+      }
+      .popup-title {
+        font-size: 17px;
+      }
+      .popup-text {
+        font-size: 13px;
+      }
+      .btn {
+        font-size: 12px;
+        padding: 7px 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confetti-canvas"></canvas>
+
+  <div class="popup-card" id="step1">
+    <h2 class="popup-title">One tiny tap, one huge lifetime... 💍</h2>
+    <p class="popup-text">
+      By pressing yes, you are signing up for something beautifully irreversible:
+      a forever kind of love with me. Are you absolutely sure, my Ammu?
+    </p>
+    <p class="popup-footer">
+      Warning: This contract includes unlimited hugs, arguments that end in cuddles, and love that does not expire.
+    </p>
+    <div class="popup-actions">
+      <button class="btn btn-no" id="noBtn">No 😏</button>
+      <button class="btn btn-yes" id="yesBtn">Yes, I’m sure ❤️</button>
+    </div>
+  </div>
+
+  <div class="popup-card" id="stepNo" style="display:none;">
+    <h2 class="popup-title">How. Dare. You. 👀</h2>
+    <p class="popup-text">
+      You really clicked “No”? STFU and click the yes below like the good wife you are.
+    </p>
+    <div class="popup-actions">
+      <button class="btn btn-yes" id="forcedYesBtn">Fine, YES 😤❤️</button>
+    </div>
+  </div>
+
+  <div class="popup-card" id="stepFinal" style="display:none;">
+    <h2 class="popup-title">Congratulations, Mrs. Mine Forever 💘</h2>
+    <p class="popup-text">
+      That’s it. No refunds, no returns. I own you, you are mine, and in my heart
+      we are already married in every way that matters.
+    </p>
+    <p class="popup-footer">
+      From this moment on, you are officially, hopelessly, beautifully mine.
+      And I am proudly, entirely yours.
+    </p>
+    <div class="popup-actions">
+      <button class="btn btn-yes" id="closeBtn">Seal it with a kiss 💋</button>
+    </div>
+  </div>
+
+<script>
+  const step1 = document.getElementById('step1');
+  const stepNo = document.getElementById('stepNo');
+  const stepFinal = document.getElementById('stepFinal');
+
+  const noBtn = document.getElementById('noBtn');
+  const yesBtn = document.getElementById('yesBtn');
+  const forcedYesBtn = document.getElementById('forcedYesBtn');
+  const closeBtn = document.getElementById('closeBtn');
+
+  function showStep(step) {
+    step1.style.display = 'none';
+    stepNo.style.display = 'none';
+    stepFinal.style.display = 'none';
+    step.style.display = 'block';
+  }
+
+  function launchConfetti() {
+    const duration = 2000;
+    const end = Date.now() + duration;
+    (function frame() {
+      confetti({
+        particleCount: 40,
+        spread: 80,
+        origin: { x: Math.random(), y: Math.random() - 0.2 }
+      });
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    })();
+  }
+
+  // YES → go to married.html in same tab
+// YES → go to married.html in same tab
+yesBtn.addEventListener('click', () => {
+  launchConfetti();
+  setTimeout(() => {
+    window.location.assign('./married.html');  // same folder
+  }, 800);
+});
+
+  noBtn.addEventListener('click', () => {
+    showStep(stepNo);
+  });
+
+  forcedYesBtn.addEventListener('click', () => {
+    showStep(step1);
+  });
+
+  closeBtn.addEventListener('click', () => {
+    launchConfetti();
+  });
+</script>
+
+</body>
+</html>

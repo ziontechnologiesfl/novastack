@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>For My Ammu ❤️</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <!-- Confetti CDN (still used for background celebration if you want later) -->
+  <script src="https://cdn.jsdelivr.net/npm/[email protected]/dist/confetti.browser.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, sans-serif;
+    }
+
+    html, body {
+      min-height: 100%;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #ff9a9e 0, #1f0026 45%, #05010a 100%);
+      color: #fff;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .hearts {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .heart {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      background: radial-gradient(circle at 30% 30%, #fff 0, #ff2f6f 40%, #ff0040 100%);
+      transform: rotate(45deg);
+      animation: floatUp 10s linear infinite;
+      opacity: 0.6;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: inherit;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -50%;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -50%;
+      top: 0;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(45deg) scale(0.8);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(-120vh) rotate(45deg) scale(1.4);
+        opacity: 0;
+      }
+    }
+
+    .page-wrapper {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 960px;
+      padding: 32px 16px 64px;
+    }
+
+    .card {
+      position: relative;
+      margin: 32px auto 0;
+      max-width: 760px;
+      padding: 28px 20px 32px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(18px) saturate(160%);
+      -webkit-backdrop-filter: blur(18px) saturate(160%);
+      animation: fadeInUp 1.4s ease-out forwards;
+      transform: translateY(40px);
+      opacity: 0;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .glow-ring {
+      position: absolute;
+      inset: -2px;
+      border-radius: inherit;
+      background: conic-gradient(
+        from 180deg,
+        #ff9a9e,
+        #fad0c4,
+        #fbc2eb,
+        #a6c0fe,
+        #ff9a9e
+      );
+      opacity: 0.16;
+      filter: blur(18px);
+      z-index: -1;
+      animation: rotateGlow 12s linear infinite;
+    }
+
+    @keyframes rotateGlow {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .title {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .title span.badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .title h1 {
+      margin-top: 14px;
+      font-size: clamp(28px, 6vw, 40px);
+      line-height: 1.25;
+    }
+
+    .title h1 .accent {
+      background: linear-gradient(120deg, #ff9a9e, #fad0c4, #fbc2eb);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle {
+      margin-top: 10px;
+      font-size: 14px;
+      opacity: 0.85;
+    }
+
+    .poem {
+      margin-top: 24px;
+      font-size: 15px;
+      line-height: 1.9;
+    }
+
+    .poem-line {
+      margin-bottom: 10px;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: lineIn 0.6s ease-out forwards;
+    }
+
+    .poem-line:nth-child(1) { animation-delay: 0.3s; }
+    .poem-line:nth-child(2) { animation-delay: 0.6s; }
+    .poem-line:nth-child(3) { animation-delay: 0.9s; }
+    .poem-line:nth-child(4) { animation-delay: 1.2s; }
+    .poem-line:nth-child(5) { animation-delay: 1.5s; }
+    .poem-line:nth-child(6) { animation-delay: 1.8s; }
+    .poem-line:nth-child(7) { animation-delay: 2.1s; }
+    .poem-line:nth-child(8) { animation-delay: 2.4s; }
+    .poem-line:nth-child(9) { animation-delay: 2.7s; }
+    .poem-line:nth-child(10) { animation-delay: 3.0s; }
+    .poem-line:nth-child(11) { animation-delay: 3.3s; }
+    .poem-line:nth-child(12) { animation-delay: 3.6s; }
+    .poem-line:nth-child(13) { animation-delay: 3.9s; }
+
+    @keyframes lineIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .heartbeat {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 17px;
+      margin-top: 16px;
+    }
+
+    .heartbeat span.heart-icon {
+      display: inline-flex;
+      animation: heartbeat 1.1s ease-in-out infinite;
+      transform-origin: center;
+    }
+
+    @keyframes heartbeat {
+      0% { transform: scale(1); }
+      25% { transform: scale(1.2); }
+      40% { transform: scale(0.95); }
+      60% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+
+    .footer-note {
+      margin-top: 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 15px;
+    }
+
+    .footer-note strong {
+      font-weight: 600;
+    }
+
+    .cta-row {
+      margin-top: 22px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .cta-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #ff5f6d, #ffc371);
+      color: #1b0516;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+      transform: translateY(0);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+      white-space: nowrap;
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+      filter: brightness(1.05);
+    }
+
+    .soft-text {
+      font-size: 13px;
+      opacity: 0.75;
+      max-width: 260px;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        padding: 22px 16px 26px;
+        border-radius: 18px;
+      }
+      .title h1 {
+        font-size: 24px;
+      }
+      .poem {
+        font-size: 14px;
+      }
+      .soft-text {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="hearts">
+    <!-- Floating hearts -->
+    <div class="heart" style="left:5%; bottom:-40px; animation-delay:0s; animation-duration:13s;"></div>
+    <div class="heart" style="left:18%; bottom:-60px; animation-delay:2s; animation-duration:11s;"></div>
+    <div class="heart" style="left:32%; bottom:-50px; animation-delay:4s; animation-duration:10s;"></div>
+    <div class="heart" style="left:48%; bottom:-70px; animation-delay:1s; animation-duration:12s;"></div>
+    <div class="heart" style="left:64%; bottom:-55px; animation-delay:3s; animation-duration:9s;"></div>
+    <div class="heart" style="left:80%; bottom:-65px; animation-delay:5s; animation-duration:14s;"></div>
+    <div class="heart" style="left:92%; bottom:-50px; animation-delay:1.5s; animation-duration:10s;"></div>
+  </div>
+
+  <div class="page-wrapper">
+    <div class="container">
+      <div class="card">
+        <div class="glow-ring"></div>
+
+        <header class="title">
+          <span class="badge">
+            💌 FROM YOUR KING • FOR MY AMMU
+          </span>
+          <h1>
+            My <span class="accent">Ammu</span> My Wife, My Forever ❤️
+          </h1>
+          <p class="subtitle">
+            A small page on a big internet, but every pixel is just to whisper how deeply I belong to you.
+          </p>
+        </header>
+
+        <main class="poem">
+          <p class="poem-line">
+            My Ammu, my wife, if I could rewrite the sky, every star would spell your name...
+          </p>
+          <p class="poem-line">
+            You are my heart's eternal flame ❤️🔥, the quiet light that never leaves, even when my world goes dark.
+          </p>
+          <p class="poem-line">
+            ✨ In your eyes, I didn’t just fall in love forever 😍I finally found the place my soul had been searching for.
+          </p>
+          <p class="poem-line">
+            Bound as one by destiny, I lay down my fears, my scars, my demons, at the feet of our marriage, and choose you, again and again.
+          </p>
+          <p class="poem-line">
+            Your touch ignites my soul 💕, your voice is the calm after every storm, the home inside my restless mind.
+          </p>
+          <p class="poem-line">
+            Every dawn ☀️ with you feels like a dream I never want to wake up from 🥰, a new chance to love you softer, deeper, truer.
+          </p>
+          <p class="poem-line">
+            Laughter shared 🎉😘, stolen glances, silly fights, late-night talksour joys keep blooming like a garden that refuses to stop.
+          </p>
+          <p class="poem-line">
+            Through storms or stars, my love, I don’t just want to survive life with youI want to sail it, hand in hand, heart to heart.
+          </p>
+          <p class="poem-line">
+            Ammu, in your arms, I'm home again 👑🏠not a place, not a house, but a feeling only you can give me.
+          </p>
+
+          <p class="poem-line heartbeat">
+            <span class="heart-icon">💗</span>
+            <span>My love, my Princess, my wife... your king stands here, with a heart that kneels only for you.</span>
+          </p>
+
+          <p class="poem-line">
+            Lemme carry you on my shoulders every day, not just in body, but in spiritlifting your dreams, guarding your smile, choosing your peace.
+          </p>
+          <p class="poem-line">
+            I want to be the hand you reach for in crowded rooms, the warmth you curl into when the world feels too loud.
+          </p>
+          <p class="poem-line">
+            Some things can’t be put in words... so let my kisses finish the sentences my voice is too full of love to say. 💋
+          </p>
+        </main>
+
+        <section class="footer-note">
+          <p><strong>So, Ammu,</strong> will you keep letting me be your safe place, your happy chaos, your forever choice, every single day of this life? 💍</p>
+          <div class="cta-row">
+            <!-- OPEN popup.html in a new tab -->
+            <button class="cta-btn" id="kingYesBtn">
+              Yes, my King 💞
+            </button>
+            <span class="soft-text">
+              (Tap this in your heart and then come collect every hug, every kiss, every lifetime I owe you.)
+            </span>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const kingYesBtn = document.getElementById('kingYesBtn');
+
+    // Open the standalone popup in a new tab/window
+    kingYesBtn.addEventListener('click', () => {
+      window.open('popup.html', '_blank'); // make sure popup.html is in the same folder
+    });
+  </script>
+</body>
+</html>
