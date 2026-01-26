@@ -4,7 +4,10 @@
   <meta charset="UTF-8" />
   <title>Yes, My King 💞</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <script src="https://cdn.jsdelivr.net/npm/[email protected]/dist/confetti.browser.min.js"></script>
+
+  <!-- canvas-confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
   <style>
     * {
       margin: 0;
@@ -163,59 +166,70 @@
     </div>
   </div>
 
-<script>
-  const step1 = document.getElementById('step1');
-  const stepNo = document.getElementById('stepNo');
-  const stepFinal = document.getElementById('stepFinal');
+  <script>
+    console.log('script loaded');
 
-  const noBtn = document.getElementById('noBtn');
-  const yesBtn = document.getElementById('yesBtn');
-  const forcedYesBtn = document.getElementById('forcedYesBtn');
-  const closeBtn = document.getElementById('closeBtn');
+    const step1 = document.getElementById('step1');
+    const stepNo = document.getElementById('stepNo');
+    const stepFinal = document.getElementById('stepFinal');
 
-  function showStep(step) {
-    step1.style.display = 'none';
-    stepNo.style.display = 'none';
-    stepFinal.style.display = 'none';
-    step.style.display = 'block';
-  }
+    const noBtn = document.getElementById('noBtn');
+    const yesBtn = document.getElementById('yesBtn');
+    const forcedYesBtn = document.getElementById('forcedYesBtn');
+    const closeBtn = document.getElementById('closeBtn');
 
-  function launchConfetti() {
-    const duration = 2000;
-    const end = Date.now() + duration;
-    (function frame() {
-      confetti({
-        particleCount: 40,
-        spread: 80,
-        origin: { x: Math.random(), y: Math.random() - 0.2 }
-      });
-      if (Date.now() < end) {
-        requestAnimationFrame(frame);
-      }
-    })();
-  }
+    // bind confetti to our canvas
+    const confettiCanvas = document.getElementById('confetti-canvas');
+    const myConfetti = confetti.create(confettiCanvas, {
+      resize: true,
+      useWorker: true
+    });
 
-  // YES → go to married.html in same tab
-// YES → go to married.html in same tab
-yesBtn.addEventListener('click', () => {
-  launchConfetti();
-  setTimeout(() => {
-    window.location.assign('./married.html');  // same folder
-  }, 800);
-});
+    function showStep(step) {
+      step1.style.display = 'none';
+      stepNo.style.display = 'none';
+      stepFinal.style.display = 'none';
+      step.style.display = 'block';
+    }
 
-  noBtn.addEventListener('click', () => {
-    showStep(stepNo);
-  });
+    function launchConfetti() {
+      const duration = 2000;
+      const end = Date.now() + duration;
 
-  forcedYesBtn.addEventListener('click', () => {
-    showStep(step1);
-  });
+      (function frame() {
+        myConfetti({
+          particleCount: 40,
+          spread: 80,
+          origin: { x: Math.random(), y: Math.random() - 0.2 }
+        });
 
-  closeBtn.addEventListener('click', () => {
-    launchConfetti();
-  });
-</script>
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      })();
+    }
 
+    // YES → go to married.html in same tab
+    yesBtn.addEventListener('click', () => {
+      console.log('yes clicked');
+      launchConfetti();
+      setTimeout(() => {
+        console.log('redirecting to married.html');
+        window.location.href = 'married.html'; // same folder
+      }, 800);
+    });
+
+    noBtn.addEventListener('click', () => {
+      showStep(stepNo);
+    });
+
+    forcedYesBtn.addEventListener('click', () => {
+      showStep(step1);
+    });
+
+    closeBtn.addEventListener('click', () => {
+      launchConfetti();
+    });
+  </script>
 </body>
 </html>
